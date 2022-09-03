@@ -5,19 +5,18 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import IconButton from "@mui/material/IconButton";
 import Input from "@mui/material/Input";
-import FilledInput from "@mui/material/FilledInput";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
-import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
-import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const Login = () => {
+  const [ userName, setUserName ] = React.useState("");
+  const [ password, setPassword ] = React.useState("");
+  const [ showPassword, setShowPassword ] = React.useState(false);
+
   return (
     <Box width="100%">
       <Container>
@@ -38,37 +37,28 @@ const Login = () => {
                 Login
               </Typography>
               <FormControl sx={{ mb: 4 }} variant="standard">
-                <InputLabel htmlFor="standard-adornment-password">
-                  Username
-                </InputLabel>
+                <InputLabel htmlFor="username">Username</InputLabel>
                 <Input
-                  id="standard-adornment-password"
+                  id="username"
                   type="text"
-                  //   value={values.password}
-                  //   onChange={handleChange("password")}
+                  value={userName}
+                  onChange={(x) => setUserName(x)}
                 />
               </FormControl>
               <FormControl sx={{ mb: 4 }} variant="standard">
-                <InputLabel htmlFor="standard-adornment-password">
-                  Password
-                </InputLabel>
+                <InputLabel htmlFor="upassword">Password</InputLabel>
                 <Input
-                  id="standard-adornment-password"
-                  //   type={values.showPassword ? "text" : "password"}
-                  //   value={values.password}
-                  //   onChange={handleChange("password")}
+                  id="upassword"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(x) => setPassword(x)}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        // onClick={handleClickShowPassword}
-                        // onMouseDown={handleMouseDownPassword}
+                        onClick={() => setShowPassword(() => !showPassword)}
                       >
-                        {/* {values.showPassword ? (
-                          <VisibilityOff />
-                        ) : ( */}
-                        <Visibility />
-                        {/* )} */}
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
                   }
