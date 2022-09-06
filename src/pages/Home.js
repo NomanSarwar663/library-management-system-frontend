@@ -8,13 +8,19 @@ import DataTable from "../component/Home/DataTable";
 
 const Home = () => {
   return (
-    <Box width="100%">
+    <Box width="100%" sx={{ backgroundColor: "#efefef" }}>
       <Container>
-        <Box p="2%" pb="3%" display="flex" flexWrap="wrap" justifyContent="center">
-          <Typography variant="h2" fontWeight="600">
-            Library Management System
+        <Box
+          p="2%"
+          pb="3%"
+          display="flex"
+          flexWrap="wrap"
+          justifyContent="center"
+        >
+          <Typography variant="h4" fontWeight="600">
+            Books
           </Typography>
-          <Box mt="30px" sx={{ width:"100%"}}>
+          <Box mt="30px" sx={{ width: "100%" }}>
             <DataTable />
           </Box>
         </Box>

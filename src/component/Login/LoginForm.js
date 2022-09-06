@@ -1,78 +1,247 @@
-import * as React from "react";
-// mui
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import Input from "@mui/material/Input";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import FormControl from "@mui/material/FormControl";
-import Typography from "@mui/material/Typography";
+import React from "react";
+import {
+  Box,
+  Stack,
+  Typography,
+  Divider,
+  TextField,
+  InputAdornment,
+  IconButton,
+  FormControlLabel,
+  Checkbox,
+  Button,
+  Alert,
+} from "@mui/material";
+import { GoogleIcon } from "../../Assets/Icons";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import LockIcon from "@mui/icons-material/Lock";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import AppleIcon from "@mui/icons-material/Apple";
+import { useNavigate } from "react-router-dom";
+// notisnack
+// import { useSnackbar } from "notistack";
+// formik
+import { useFormik, Form, FormikProvider } from "formik";
+// Yup
+import * as Yup from "yup";
+// hooks
+import useAuth from "../../Hooks/useAuth";
 
 const LoginForm = () => {
-  const [userName, setUserName] = React.useState("nomansarwar");
-  const [password, setPassword] = React.useState("123456");
   const [showPassword, setShowPassword] = React.useState(false);
 
-  const toggleVisibility = () => {
-    setShowPassword(() => !showPassword);
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
-  const handleUserName = (x) => {
-    console.log("The x username is", x);
-    setUserName(x);
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
   };
 
-  const handlePassword = (x) => {
-    console.log("The x pass is", x);
-    setPassword(x);
-  };
+  const { signIn } = useAuth();
+  const navigate = useNavigate();
+  // const { enqueueSnackbar } = useSnackbar();
 
+  // validation schema
+  const LoginSchema = Yup.object().shape({
+    email: Yup.string()
+      .email("Email must be a valid email address")
+      .required("The Email address field is required."),
+    password: Yup.string().required("The Password field is required."),
+  });
+
+  // formik
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: LoginSchema,
+    onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
+      console.log(values);
+      try {
+        console.log("here");
+        const result = await signIn(values.email, values.password);
+        console.log(result);
+        if (result && result.status === "Success") {
+          navigate("/books");
+        } else {
+          setErrors({ afterSubmit: result?.message || "Login failed" });
+        }
+      } catch (error) {
+        resetForm();
+        setSubmitting(false);
+        setErrors({ afterSubmit: error.message });
+      }
+    },
+  });
+
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
   return (
-    <Box
-      maxWidth="300px"
-      height="auto"
-      p="40px"
-      border="1px solid black"
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-    >
-      <Typography mb="5px" variant="h6" fontWeight="600">
-        Login
-      </Typography>
-      <FormControl sx={{ mb: 4 }} variant="standard">
-        <InputLabel htmlFor="username">Username</InputLabel>
-        <Input
-          id="username"
-          type="text"
-          value={userName}
-          onChange={handleUserName}
-        />
-      </FormControl>
-      <FormControl sx={{ mb: 4 }} variant="standard">
-        <InputLabel htmlFor="upassword">Password</InputLabel>
-        <Input
-          id="upassword"
-          type={showPassword ? "text" : "password"}
-          value={password}
-          onChange={handlePassword}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={toggleVisibility}
+    <FormikProvider value={formik}>
+      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+        <Stack
+          spacing={2}
+          alignItems="center"
+          sx={{ width: { xs: "100%", md: "100%" } }}
+        >
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: "700" }}
+            color="primary.main"
+          >
+            LIBRARY MANAGEMENT SYSTEM
+          </Typography>
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: "700" }}
+            color="text.primary"
+          >
+            Log In
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{ fontWeight: "500" }}
+            color="text.secondary"
+          >
+            Welcome back, you've been missed!
+          </Typography>
+          <Stack width="100%">
+            {errors.afterSubmit && (
+              <Alert severity="error">{errors.afterSubmit}</Alert>
+            )}
+          </Stack>
+          <Stack sx={{ width: "100%", py: 2.5 }}>
+            <Divider>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "500" }}
+                color="text.secondary"
               >
-                {showPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            </InputAdornment>
-          }
-        />
-      </FormControl>
-      <Button variant="contained">Login</Button>
-    </Box>
+                OR
+              </Typography>
+            </Divider>
+          </Stack>
+          <Stack spacing={2} sx={{ width: "100%" }}>
+            <TextField
+              variant="outlined"
+              placeholder="Your Email"
+              {...getFieldProps("email")}
+              error={Boolean(touched.email && errors.email)}
+              helperText={touched.email && errors.email}
+              sx={{
+                [`& fieldset`]: {
+                  borderRadius: 3,
+                },
+                "&:focus": {
+                  backgroundColor: "blue",
+                },
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment
+                    position="start"
+                    sx={{ borderRadius: "30px 30px 0 0" }}
+                  >
+                    <AlternateEmailIcon sx={{ fontSize: 20 }} />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              variant="outlined"
+              placeholder="Password"
+              {...getFieldProps("password")}
+              error={Boolean(touched.password && errors.password)}
+              helperText={touched.password && errors.password}
+              type={showPassword ? "text" : "password"}
+              sx={{
+                [`& fieldset`]: {
+                  borderRadius: 3,
+                },
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start" sx={{ borderRadius: 3 }}>
+                    <LockIcon sx={{ fontSize: 20 }} />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="start" sx={{ borderRadius: 3 }}>
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Stack>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{ width: "100%" }}
+          >
+            <FormControlLabel
+              control={
+                <Checkbox
+                  icon={
+                    <Box
+                      sx={{
+                        height: "24px",
+                        width: "24px",
+                        background: "#efefef",
+                        borderRadius: 2,
+                      }}
+                    ></Box>
+                  }
+                  checkedIcon={<CheckBoxIcon />}
+                />
+              }
+              label={
+                <>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: "500" }}
+                    color="text.secondary"
+                  >
+                    Remember me
+                  </Typography>
+                </>
+              }
+            />
+            <Typography
+              variant="body2"
+              sx={{ fontWeight: "500" }}
+              color="text.secondary"
+            >
+              Forgot Password?
+            </Typography>
+          </Stack>
+          <Stack sx={{ width: "100%" }}>
+            <Button
+              variant="contained"
+              disableElevation
+              type="submit"
+              sx={{
+                borderRadius: 3,
+                textTransform: "capitalize",
+                height: "50px",
+              }}
+            >
+              Log In
+            </Button>
+          </Stack>
+        </Stack>
+      </Form>
+    </FormikProvider>
   );
 };
 
