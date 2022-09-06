@@ -8,17 +8,17 @@ import LoginForm from "../component/Login/LoginForm";
 
 const Login = () => {
   return (
-    <Box width="100%">
-      <Container>
-        <Box p="2%" display="flex" flexWrap="wrap" justifyContent="center">
-          <Typography variant="h2" fontWeight="600">
-            Library Management System
-          </Typography>
-          <Box mt="70px">
-            <LoginForm />
-          </Box>
-        </Box>
-      </Container>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+        height: "100vh",
+        my: "auto 0",
+      }}
+    >
+      <LoginForm />
     </Box>
   );
 };
