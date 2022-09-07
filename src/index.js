@@ -1,6 +1,7 @@
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./Contexts/JWTContext";
 import Router from "./routes";
 
 import reportWebVitals from "./reportWebVitals";
@@ -8,7 +9,9 @@ import reportWebVitals from "./reportWebVitals";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
-    <Router />
+    <AuthProvider>
+      <Router />
+    </AuthProvider>
   </BrowserRouter>
 );
 

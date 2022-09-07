@@ -1,6 +1,6 @@
 import axios from "axios";
 // configuration
-const baseURL = "http://localhost:8000/";
+const baseURL = process.env.REACT_APP_API_URL;
 
 // ----------------------------------------------------------------------
 

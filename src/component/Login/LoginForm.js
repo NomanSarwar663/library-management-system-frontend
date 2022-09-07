@@ -12,7 +12,6 @@ import {
   Button,
   Alert,
 } from "@mui/material";
-import { GoogleIcon } from "../../Assets/Icons";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
@@ -21,6 +20,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import AppleIcon from "@mui/icons-material/Apple";
 import { useNavigate } from "react-router-dom";
 // notisnack
+import axios from "../../utils/axios";
 // import { useSnackbar } from "notistack";
 // formik
 import { useFormik, Form, FormikProvider } from "formik";
@@ -61,8 +61,8 @@ const LoginForm = () => {
     validationSchema: LoginSchema,
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       console.log(values);
+
       try {
-        console.log("here");
         const result = await signIn(values.email, values.password);
         console.log(result);
         if (result && result.status === "Success") {
@@ -78,7 +78,7 @@ const LoginForm = () => {
     },
   });
 
-  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, handleSubmit, getFieldProps } = formik;
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
