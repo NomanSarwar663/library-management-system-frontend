@@ -18,15 +18,15 @@ const handlers = {
       userData,
     };
   },
-  //   REGISTER: (state, action) => {
-  //     const { userData } = action.payload;
+  REGISTER: (state, action) => {
+    const { userData } = action.payload;
 
-  //     return {
-  //       ...state,
-  //       isAuthenticated: true,
-  //       userData,
-  //     };
-  //   },
+    return {
+      ...state,
+      isAuthenticated: true,
+      userData,
+    };
+  },
   LOGOUT: (state) => ({
     ...state,
     isAuthenticated: false,
@@ -40,7 +40,7 @@ const reducer = (state, action) =>
 const AuthContext = createContext({
   ...initialState,
   signIn: () => Promise.resolve(),
-  //   signUp: () => Promise.resolve(),
+  signUp: () => Promise.resolve(),
   logout: () => Promise.resolve(),
 });
 
@@ -72,13 +72,13 @@ function AuthProvider({ children }) {
         });
       }
     };
-    console.log("in useeff");
+
     initialize();
   }, []);
 
   //login api call
   const signIn = async (email, password) => {
-    console.log("in Auth");
+    console.log("in signin");
     const response = await axios.post("/login", {
       email,
       password,
@@ -101,38 +101,38 @@ function AuthProvider({ children }) {
           userData,
         },
       });
-      navigate("/books");
+      navigate("/");
     }
 
     return data;
   };
 
   // Register api call
-  //   const signUp = async (payload) => {
-  //     const response = await axios.post("/register", { ...payload });
-  //     const { data } = response;
-  //     if (data && data.status === "Success") {
-  //       const { accessToken, user } = data;
-  //       const userData = {
-  //         firstName: user.firstName,
-  //         lastName: user.lastName,
-  //         _id: user._id,
-  //         email: user.email,
-  //         phoneNo: user.phoneNo,
-  //       };
-  //       setSession(accessToken);
-  //       localStorage.setItem("user", JSON.stringify(userData));
-  //       dispatch({
-  //         type: "REGISTER",
-  //         payload: {
-  //           userData,
-  //         },
-  //       });
-  //     }
-  //     navigate("/primary-menu");
+  const signUp = async (payload) => {
+    const response = await axios.post("/register", { ...payload });
+    const { data } = response;
+    if (data && data.status === "Success") {
+      const { accessToken, user } = data;
+      const userData = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        _id: user._id,
+        email: user.email,
+        phoneNo: user.phoneNo,
+      };
+      setSession(accessToken);
+      localStorage.setItem("user", JSON.stringify(userData));
+      dispatch({
+        type: "REGISTER",
+        payload: {
+          userData,
+        },
+      });
+    }
+    navigate("/primary-menu");
 
-  //     return data;
-  //   };
+    return data;
+  };
 
   //   logout api call
   const logout = async () => {
@@ -140,7 +140,7 @@ function AuthProvider({ children }) {
     dispatch({ type: "LOGOUT" });
     localStorage.removeItem("accessToken");
     localStorage.removeItem("user");
-    navigate("/books");
+    navigate("/");
   };
 
   return (
@@ -148,7 +148,7 @@ function AuthProvider({ children }) {
       value={{
         ...state,
         signIn,
-        // signUp,
+        signUp,
         logout,
       }}
     >

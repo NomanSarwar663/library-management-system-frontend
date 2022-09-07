@@ -4,6 +4,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useNavigate } from "react-router-dom";
+import InputMask from "react-input-mask";
 // formik
 import { useFormik, Form, FormikProvider } from "formik";
 // Yup
@@ -26,7 +27,7 @@ const CheckOutForm = () => {
 
   const CheckOutSchema = Yup.object().shape({
     name: Yup.string().required("The Name of Borrower is required."),
-    phoneNo: Yup.number().required("The Phone Number  is required."),
+    phoneNo: Yup.string().required("The Phone Number  is required."),
     NIC: Yup.string().required("The NIC of Borrower is required."),
   });
 
@@ -42,6 +43,7 @@ const CheckOutForm = () => {
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
         let newDate = convertDate(date);
+        console.log({ ...values, checkoutDate: newDate });
         const result = await PostCheckOutDetail({
           bookId: "123",
           ...values,
@@ -61,7 +63,14 @@ const CheckOutForm = () => {
     },
   });
 
-  const { errors, touched, handleSubmit, getFieldProps } = formik;
+  const {
+    values,
+    errors,
+    touched,
+    handleSubmit,
+    setFieldValue,
+    getFieldProps,
+  } = formik;
 
   return (
     <FormikProvider value={formik}>
@@ -79,7 +88,27 @@ const CheckOutForm = () => {
               },
             }}
           />
-          <TextField
+          <InputMask
+            mask="99-999 9999"
+            value={values.phoneNo}
+            disabled={false}
+            maskChar=" "
+            onChange={(e) => setFieldValue("phoneNo", e.target.value)}
+          >
+            {() => (
+              <TextField
+                label="Phone Number"
+                error={Boolean(touched.phoneNo && errors.phoneNo)}
+                helperText={touched.phoneNo && errors.phoneNo}
+                sx={{
+                  [`& fieldset`]: {
+                    borderRadius: 3,
+                  },
+                }}
+              />
+            )}
+          </InputMask>
+          {/* <TextField
             variant="outlined"
             label="Phone Number"
             type="number"
@@ -91,8 +120,8 @@ const CheckOutForm = () => {
                 borderRadius: 3,
               },
             }}
-          />
-          <TextField
+          /> */}
+          {/* <TextField
             variant="outlined"
             label="National ID"
             type="number"
@@ -104,7 +133,27 @@ const CheckOutForm = () => {
                 borderRadius: 3,
               },
             }}
-          />
+          /> */}
+          <InputMask
+            mask="99999999999"
+            value={values.NIC}
+            disabled={false}
+            maskChar=" "
+            onChange={(e) => setFieldValue("NIC", e.target.value)}
+          >
+            {() => (
+              <TextField
+                label="National ID"
+                error={Boolean(touched.NIC && errors.NIC)}
+                helperText={touched.NIC && errors.NIC}
+                sx={{
+                  [`& fieldset`]: {
+                    borderRadius: 3,
+                  },
+                }}
+              />
+            )}
+          </InputMask>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               openTo="year"

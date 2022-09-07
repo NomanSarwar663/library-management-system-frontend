@@ -2,7 +2,7 @@ import * as React from "react";
 // propTypes
 import PropTypes from "prop-types";
 // mui
-import { Box, Stack, Button } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import CheckOutForm from "./CheckOutForm";
 
 const CheckOutDetail = () => {

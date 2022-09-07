@@ -8,7 +8,7 @@ import {
 } from "../pages";
 
 import { Routes, Route, Navigate } from "react-router-dom";
-// import AuthGuard from "../Guards/AuthGuard";
+import AuthGuard from "../Guards/AuthGuard";
 
 const Router = () => {
   return (
@@ -17,11 +17,42 @@ const Router = () => {
       <Route path="/auth/login" element={<LoginPage />} />,{/* App routes */}
       <Route path="/" element={<Navigate to="/books" />} />
       ,
-      <Route path="/books" element={<HomePage />} />
+      <Route
+        path="/books"
+        element={
+          <AuthGuard>
+            <HomePage />
+          </AuthGuard>
+        }
+      />
       ,
-      <Route path="/book/:id" element={<DetailPage />} />,
-      <Route path="/book/:id/check-in" element={<CheckInPage />} />,
-      <Route path="/book/:id/check-out" element={<CheckOutPage />} />,
+      <Route
+        path="/book/:id"
+        element={
+          <AuthGuard>
+            <DetailPage />
+          </AuthGuard>
+        }
+      />
+      ,
+      <Route
+        path="/book/:id/check-in"
+        element={
+          <AuthGuard>
+            <CheckInPage />
+          </AuthGuard>
+        }
+      />
+      ,
+      <Route
+        path="/book/:id/check-out"
+        element={
+          <AuthGuard>
+            <CheckOutPage />
+          </AuthGuard>
+        }
+      />
+      ,
       <Route path="*" element={<Page404 />} />
     </Routes>
   );

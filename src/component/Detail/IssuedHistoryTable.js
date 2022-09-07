@@ -36,23 +36,22 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, checkInDate, checkOutDate, status) {
+function createData(name, checkInDate, checkOutDate) {
   return {
     name,
     checkInDate,
     checkOutDate,
-    status,
   };
 }
 
 const rows = [
-  createData("Noman Sarwar", "------", "01/09/2022", "checkedOut"),
-  createData("Mireya Conner", "01/09/2022", "21/08/2022", "checkedIn"),
-  createData("Esperanza Mcintyre", "01/09/2022", "21/08/2022", "checkedIn"),
-  createData("Brycen Jimenez", "01/09/2022", "21/08/2022", "checkedIn"),
-  createData("Melanie Noble", "01/09/2022", "21/08/2022", "checkedIn"),
-  createData("Melanie Noble", "01/09/2022", "21/08/2022", "checkedIn"),
-  createData("Melanie Noble", "01/09/2022", "21/08/2022", "checkedIn"),
+  createData("Karen", "01/09/2022", "21/08/2022"),
+  createData("Esperanza Mcintyre", "01/09/2022", "21/08/2022"),
+  createData("Brycen Jimenez", "01/09/2022", "21/08/2022"),
+  createData("Melanie Noble", "01/09/2022", "21/08/2022"),
+  createData("Theresa", "01/09/2022", "21/08/2022"),
+  createData("John", "01/09/2022", "21/08/2022"),
+  createData("Jessica", "01/09/2022", "21/08/2022"),
 ];
 
 const headCells = [
@@ -73,12 +72,6 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: "CheckOut Date",
-  },
-  {
-    id: "status",
-    numeric: true,
-    disablePadding: false,
-    label: "Status",
   },
 ];
 
@@ -119,13 +112,9 @@ const IssuedHistoryTable = () => {
             <TableBody sx={{ p: 1 }}>
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
+                .map((row, index) => {
                   return (
-                    <StyledTableRow
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.name}
-                    >
+                    <StyledTableRow role="checkbox" tabIndex={-1} key={index}>
                       <StyledTableCell
                         component="th"
                         scope="row"
@@ -147,14 +136,6 @@ const IssuedHistoryTable = () => {
                       </StyledTableCell>
                       <StyledTableCell align="left">
                         {row.checkOutDate}
-                      </StyledTableCell>
-
-                      <StyledTableCell align="left">
-                        {row.status === "checkedIn" ? (
-                          <Chip label={row.status} color="success" />
-                        ) : (
-                          <Chip label={row.status} color="warning" />
-                        )}
                       </StyledTableCell>
                     </StyledTableRow>
                   );
