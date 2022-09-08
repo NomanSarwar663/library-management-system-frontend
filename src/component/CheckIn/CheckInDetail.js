@@ -33,7 +33,7 @@ const CheckInDetail = () => {
             }}
           ></Box>
         </Stack>
-        <Stack component="div" alignItems="center" spacing={1}>
+        <Stack alignItems="center" spacing={1}>
           <Stack
             component="span"
             sx={{ width: "100%" }}

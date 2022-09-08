@@ -30,7 +30,7 @@ const CheckOut = () => {
             Check-out Form
           </Typography>
           <Box mt="30px" sx={{ width: "100%" }}>
-            <CheckOutDetail />
+            <CheckOutDetail data={{}} />
           </Box>
         </Box>
       </Container>

@@ -2,9 +2,9 @@ import * as React from "react";
 // mui
 import Box from "@mui/material/Box";
 // components
-import LoginForm from "../component/Login/LoginForm";
+import SignupForm from "../component/Signup/SignupForm";
 
-const Login = () => {
+const Signup = () => {
   return (
     <Box
       sx={{
@@ -16,9 +16,9 @@ const Login = () => {
         my: "auto 0",
       }}
     >
-      <LoginForm />
+      <SignupForm />
     </Box>
   );
 };
 
-export default Login;
+export default Signup;
