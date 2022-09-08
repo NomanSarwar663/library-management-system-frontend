@@ -14,11 +14,11 @@ import Stack from "@mui/material/Stack";
 
 import Radio from "@mui/material/Radio";
 
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import DeleteIcon from "@mui/icons-material/Delete";
+// import IconButton from "@mui/material/IconButton";
+// import Tooltip from "@mui/material/Tooltip";
+// import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -206,7 +206,6 @@ const TopBar = ({ book }) => {
       <Stack
         direction={{ xs: "column", md: "row" }}
         justifyContent={{ xs: "center", md: "space-between" }}
-        alignItem="center"
         sx={{ alignItems: "center", width: "100%", p: 1 }}
       >
         <Typography
@@ -228,11 +227,11 @@ const TopBar = ({ book }) => {
           <Button
             variant="contained"
             disableElevation
-            disabled={book.status === "checkIn" ? true : false}
+            disabled={book.status === "check-in" ? true : false}
             onClick={() => navigate("/book/1234/check-in")}
             sx={{
               width: "120",
-              display: book.status === "checkIn" ? "none" : "block",
+              display: book.status === "check-in" ? "none" : "block",
             }}
           >
             Check in
@@ -252,7 +251,7 @@ const TopBar = ({ book }) => {
           <Button
             variant="outlined"
             disableElevation
-            onClick={() => navigate("/book/1234")}
+            onClick={() => navigate(`/book/${book._id}`)}
             sx={{
               width: "120",
             }}
@@ -269,7 +268,7 @@ TopBar.propTypes = {
   book: PropTypes.object.isRequired,
 };
 
-const DataTable = () => {
+const DataTable = ({ books = rows }) => {
   const [selectedRowId, setSelectedRowId] = React.useState(-1);
   const rowsPerPage = 10;
   const [page, setPage] = React.useState(0);
@@ -285,7 +284,7 @@ const DataTable = () => {
   return (
     <Paper sx={{ boxShadow: 5, borderRadius: 3 }}>
       {selectedRowId !== -1 && (
-        <TopBar book={rows.filter((book) => book.id === selectedRowId)[0]} />
+        <TopBar book={books.filter((book) => book._id === selectedRowId)[0]} />
       )}
       <TableContainer>
         <Table sx={{ minWidth: 750 }} size="medium">
@@ -305,9 +304,9 @@ const DataTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
+            {books
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((book, index) => {
+              .map((book) => {
                 const isItemSelected = selectedRowId === book.id;
 
                 return (
@@ -315,11 +314,11 @@ const DataTable = () => {
                     hover
                     onClick={(event) => {
                       console.log("The book is", book);
-                      return handleClick(event, book.id);
+                      return handleClick(event, book._id);
                     }}
                     role="radio"
                     tabIndex={-1}
-                    key={book.id}
+                    key={book._id}
                     selected={isItemSelected}
                   >
                     <StyledTableCell padding="checkbox">
@@ -327,7 +326,7 @@ const DataTable = () => {
                     </StyledTableCell>
                     <StyledTableCell
                       component="th"
-                      id={book.id}
+                      id={book._id}
                       scope="row"
                       padding="none"
                     >
@@ -342,7 +341,7 @@ const DataTable = () => {
                       {book.publishYear}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {book.price}
+                      {book.coverPrice}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {book.status}
@@ -355,7 +354,7 @@ const DataTable = () => {
       </TableContainer>
       <TablePagination
         component="div"
-        count={rows.length}
+        count={books.length}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[]}
         page={page}

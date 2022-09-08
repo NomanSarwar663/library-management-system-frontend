@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { Box, Stack } from "@mui/material";
 import CheckOutForm from "./CheckOutForm";
 
-const CheckOutDetail = () => {
+const CheckOutDetail = ({ data }) => {
   return (
     <Box
       sx={{

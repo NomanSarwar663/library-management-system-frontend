@@ -3,14 +3,13 @@ import { styled } from "@mui/material/styles";
 import {
   Box,
   Stack,
-  Avatar,
+  Alert,
   Table,
   TableBody,
   TableContainer,
   TableHead,
   TablePagination,
   TableRow,
-  Chip,
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
@@ -75,7 +74,7 @@ const headCells = [
   },
 ];
 
-const IssuedHistoryTable = () => {
+const IssuedHistoryTable = ({ data }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -93,75 +92,87 @@ const IssuedHistoryTable = () => {
 
   return (
     <Box sx={{ width: "100%", borderRadius: 5 }}>
-      <Paper sx={{ width: "100%", borderRadius: 5, boxShadow: 0 }}>
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size="medium"
-          >
-            <TableHead>
-              <TableRow sx={{ bgcolor: "#808080", color: "#fff" }}>
-                {headCells.map((cell) => (
-                  <TableCell align="left" key={cell.id} sx={{ color: "#fff" }}>
-                    {cell.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody sx={{ p: 1 }}>
-              {rows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  return (
-                    <StyledTableRow role="checkbox" tabIndex={-1} key={index}>
-                      <StyledTableCell
-                        component="th"
-                        scope="row"
-                        padding="none"
-                      >
-                        <Stack
-                          direction="row"
-                          alignItems="center"
-                          spacing={2}
-                          sx={{ pl: 2 }}
+      {data ? (
+        <Paper sx={{ width: "100%", borderRadius: 5, boxShadow: 0 }}>
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+              size="medium"
+            >
+              <TableHead>
+                <TableRow sx={{ bgcolor: "#808080", color: "#fff" }}>
+                  {headCells.map((cell) => (
+                    <TableCell
+                      align="left"
+                      key={cell.id}
+                      sx={{ color: "#fff" }}
+                    >
+                      {cell.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody sx={{ p: 1 }}>
+                {data
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    return (
+                      <StyledTableRow role="checkbox" tabIndex={-1} key={index}>
+                        <StyledTableCell
+                          component="th"
+                          scope="row"
+                          padding="none"
                         >
-                          <Typography variant="body1" noWrap>
-                            {row.name}
-                          </Typography>
-                        </Stack>
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {row.checkInDate}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {row.checkOutDate}
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <StyledTableRow
-                  style={{
-                    height: 53 * emptyRows,
-                  }}
-                >
-                  <StyledTableCell colSpan={6} />
-                </StyledTableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+                          <Stack
+                            direction="row"
+                            alignItems="center"
+                            spacing={2}
+                            sx={{ pl: 2 }}
+                          >
+                            <Typography variant="body1" noWrap>
+                              {row.name}
+                            </Typography>
+                          </Stack>
+                        </StyledTableCell>
+                        <StyledTableCell align="left">
+                          {row.checkInDate}
+                        </StyledTableCell>
+                        <StyledTableCell align="left">
+                          {row.checkOutDate}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <StyledTableRow
+                    style={{
+                      height: 53 * emptyRows,
+                    }}
+                  >
+                    <StyledTableCell colSpan={6} />
+                  </StyledTableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      ) : (
+        <Stack alignItems="center" sx={{ pb: 3 }}>
+          <Alert severity="info" sx={{ display: "flex", alignItems: "center" }}>
+            This Book has not been Issued Yet!
+          </Alert>
+        </Stack>
+      )}
     </Box>
   );
 };

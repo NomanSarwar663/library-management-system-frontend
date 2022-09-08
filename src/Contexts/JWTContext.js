@@ -109,27 +109,31 @@ function AuthProvider({ children }) {
 
   // Register api call
   const signUp = async (payload) => {
+    console.log(payload);
     const response = await axios.post("/register", { ...payload });
     const { data } = response;
+    console.log(data.status);
     if (data && data.status === "Success") {
-      const { accessToken, user } = data;
-      const userData = {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        _id: user._id,
-        email: user.email,
-        phoneNo: user.phoneNo,
-      };
-      setSession(accessToken);
-      localStorage.setItem("user", JSON.stringify(userData));
-      dispatch({
-        type: "REGISTER",
-        payload: {
-          userData,
-        },
-      });
+      console.log(data);
+      // const { accessToken, user } = data;
+      // console.log(accessToken, user);
+      // const userData = {
+      //   firstName: user.firstName,
+      //   lastName: user.lastName,
+      //   _id: user._id,
+      //   email: user.email,
+      //   phoneNo: user.phoneNo,
+      // };
+      // setSession(accessToken);
+      // localStorage.setItem("user", JSON.stringify(userData));
+      // dispatch({
+      //   type: "REGISTER",
+      //   payload: {
+      //     userData,
+      //   },
+      // });
+      navigate("/books");
     }
-    navigate("/primary-menu");
 
     return data;
   };

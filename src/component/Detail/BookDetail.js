@@ -2,10 +2,27 @@ import * as React from "react";
 // propTypes
 import PropTypes from "prop-types";
 // mui
-import { Box, Typography, Stack, Alert, Grid } from "@mui/material";
+import { Box, Typography, Stack, Alert, Grid, Chip } from "@mui/material";
 import IssuedHistoryTable from "./IssuedHistoryTable";
+import { useParams } from "react-router-dom";
+import { GetBookDetail } from "../../Api";
 
 const BookDetail = () => {
+  const [book, setBook] = React.useState({});
+  const { bookId } = useParams();
+  console.log(bookId);
+
+  const GetDetail = async () => {
+    const result = await GetBookDetail(bookId);
+    console.log(result);
+    setBook(result.book);
+  };
+
+  React.useEffect(() => {
+    GetDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Box
       width="100%"
@@ -22,22 +39,26 @@ const BookDetail = () => {
             >
               Book Details
             </Typography>
-            <Stack>
-              <Alert
-                severity="warning"
-                sx={{ display: "flex", alignItems: "center" }}
-              >
-                This Book is Currently Issued to{" "}
-                <Typography
-                  variant="subtitle1"
-                  display="inline"
-                  component="span"
-                  sx={{ ml: 1 }}
+            {book.issuedDetail ? (
+              <Stack>
+                <Alert
+                  severity="warning"
+                  sx={{ display: "flex", alignItems: "center" }}
                 >
-                  NOMAN SARWAR!
-                </Typography>
-              </Alert>
-            </Stack>
+                  This Book is Currently Issued to{" "}
+                  <Typography
+                    variant="subtitle1"
+                    display="inline"
+                    component="span"
+                    sx={{ ml: 1 }}
+                  >
+                    {book.issuedDetail.borrowerName}!
+                  </Typography>
+                </Alert>
+              </Stack>
+            ) : (
+              <></>
+            )}
             <Stack
               component="span"
               direction="row"
@@ -47,7 +68,7 @@ const BookDetail = () => {
               <Typography variant="body2" fontWeight="600">
                 Book Title:
               </Typography>
-              <Typography variant="body2">Math</Typography>
+              <Typography variant="h6">{book.title}</Typography>
             </Stack>
             <Stack
               component="span"
@@ -58,7 +79,7 @@ const BookDetail = () => {
               <Typography variant="body2" fontWeight="600">
                 ISBN:
               </Typography>
-              <Typography variant="body2">3577689865436789</Typography>
+              <Typography variant="body2">{book.isbn}</Typography>
             </Stack>
             <Stack
               component="span"
@@ -69,7 +90,7 @@ const BookDetail = () => {
               <Typography variant="body2" fontWeight="600">
                 Publish Year:
               </Typography>
-              <Typography variant="body2">2022</Typography>
+              <Typography variant="body2">{book.publishYear}</Typography>
             </Stack>
             <Stack
               component="span"
@@ -80,7 +101,7 @@ const BookDetail = () => {
               <Typography variant="body2" fontWeight="600">
                 Cover price:
               </Typography>
-              <Typography variant="body2">300 pkr</Typography>
+              <Typography variant="body2">{book.coverPrice} pkr</Typography>
             </Stack>
             <Stack
               component="span"
@@ -91,42 +112,66 @@ const BookDetail = () => {
               <Typography variant="body2" fontWeight="600">
                 Status:
               </Typography>
-              <Typography variant="body2">Check-in</Typography>
+              <Box>
+                {book.status === "check-in" ? (
+                  <Chip label={book.status} color="success" />
+                ) : (
+                  <Chip label={book.status} color="warning" />
+                )}
+              </Box>
             </Stack>
           </Stack>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Stack component="div" sx={{ p: 4, borderRadius: 3, boxShadow: 5 }}>
+          <Stack
+            component="div"
+            spacing={2}
+            sx={{ p: 4, borderRadius: 3, boxShadow: 5 }}
+          >
             <Typography
               variant="h5"
               fontWeight="600"
-              sx={{ matginBottom: "50px", textAlign: "center", mb: 2 }}
+              sx={{ matginBottom: "50px", textAlign: "center" }}
               color="primary.main"
             >
               Issued Details
             </Typography>
-            <Stack
-              component="span"
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Typography variant="body2" fontWeight="600">
-                Issuer Name:
-              </Typography>
-              <Typography variant="body2">Noman Sarwar</Typography>
-            </Stack>
-            <Stack
-              component="span"
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Typography variant="body2" fontWeight="600">
-                Phone no:
-              </Typography>
-              <Typography variant="body2">03001234567</Typography>
-            </Stack>
+            {book.issuedDetail ? (
+              <>
+                <Stack
+                  component="span"
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Typography variant="body2" fontWeight="600">
+                    Issuer Name:
+                  </Typography>
+                  <Typography variant="body2">Noman Sarwar</Typography>
+                </Stack>
+                <Stack
+                  component="span"
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Typography variant="body2" fontWeight="600">
+                    Phone no:
+                  </Typography>
+                  <Typography variant="body2">03001234567</Typography>
+                </Stack>
+              </>
+            ) : (
+              <Stack>
+                <Alert
+                  severity="success"
+                  variant="outlined"
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
+                  This Book is Not Issued Yet
+                </Alert>
+              </Stack>
+            )}
           </Stack>
         </Grid>
         <Grid item xs={12}>
@@ -142,7 +187,7 @@ const BookDetail = () => {
             >
               Issued History
             </Typography>
-            <IssuedHistoryTable />
+            <IssuedHistoryTable data={book.issuedHistory} />
           </Stack>
         </Grid>
       </Grid>

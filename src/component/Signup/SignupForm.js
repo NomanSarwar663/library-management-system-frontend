@@ -1,14 +1,11 @@
 import React from "react";
 import {
-  Box,
   Stack,
   Typography,
   Divider,
   TextField,
   InputAdornment,
   IconButton,
-  FormControlLabel,
-  Checkbox,
   Button,
   Alert,
 } from "@mui/material";
@@ -16,8 +13,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import LockIcon from "@mui/icons-material/Lock";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // formik
 import { useFormik, Form, FormikProvider } from "formik";
 // Yup
@@ -25,7 +21,7 @@ import * as Yup from "yup";
 // hooks
 import useAuth from "../../Hooks/useAuth";
 
-const LoginForm = () => {
+const SignupForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => {
@@ -36,12 +32,14 @@ const LoginForm = () => {
     event.preventDefault();
   };
 
-  const { signIn } = useAuth();
+  const { signUp } = useAuth();
   const navigate = useNavigate();
   // const { enqueueSnackbar } = useSnackbar();
 
   // validation schema
   const LoginSchema = Yup.object().shape({
+    firstName: Yup.string().required("The first name field is required."),
+    lastName: Yup.string().required("The last name field is required."),
     email: Yup.string()
       .email("Email must be a valid email address")
       .required("The Email address field is required."),
@@ -51,6 +49,8 @@ const LoginForm = () => {
   // formik
   const formik = useFormik({
     initialValues: {
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
     },
@@ -59,7 +59,7 @@ const LoginForm = () => {
       console.log(values);
 
       try {
-        const result = await signIn(values.email, values.password);
+        const result = await signUp(values);
         console.log(result);
         if (result && result.status === "Success") {
           navigate("/books");
@@ -95,14 +95,7 @@ const LoginForm = () => {
             sx={{ fontWeight: "700" }}
             color="text.primary"
           >
-            Log In
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{ fontWeight: "500" }}
-            color="text.secondary"
-          >
-            Welcome back, you've been missed!
+            Register
           </Typography>
           <Stack width="100%">
             {errors.afterSubmit && (
@@ -119,6 +112,34 @@ const LoginForm = () => {
                 OR
               </Typography>
             </Divider>
+          </Stack>
+          <Stack direction="row" spacing={2} width="100%">
+            <TextField
+              variant="outlined"
+              placeholder="First Name"
+              {...getFieldProps("firstName")}
+              error={Boolean(touched.firstName && errors.firstName)}
+              helperText={touched.firstName && errors.firstName}
+              sx={{
+                width: "50%",
+                [`& fieldset`]: {
+                  borderRadius: 3,
+                },
+              }}
+            />
+            <TextField
+              variant="outlined"
+              placeholder="Last Name"
+              {...getFieldProps("lastName")}
+              error={Boolean(touched.lastName && errors.lastName)}
+              helperText={touched.lastName && errors.lastName}
+              sx={{
+                width: "50%",
+                [`& fieldset`]: {
+                  borderRadius: 3,
+                },
+              }}
+            />
           </Stack>
           <Stack spacing={2} sx={{ width: "100%" }}>
             <TextField
@@ -179,48 +200,7 @@ const LoginForm = () => {
               }}
             />
           </Stack>
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-            sx={{ width: "100%" }}
-          >
-            <FormControlLabel
-              control={
-                <Checkbox
-                  icon={
-                    <Box
-                      sx={{
-                        height: "24px",
-                        width: "24px",
-                        background: "#efefef",
-                        borderRadius: 2,
-                      }}
-                    ></Box>
-                  }
-                  checkedIcon={<CheckBoxIcon />}
-                />
-              }
-              label={
-                <>
-                  <Typography
-                    variant="body2"
-                    sx={{ fontWeight: "500" }}
-                    color="text.secondary"
-                  >
-                    Remember me
-                  </Typography>
-                </>
-              }
-            />
-            <Typography
-              variant="body2"
-              sx={{ fontWeight: "500" }}
-              color="text.secondary"
-            >
-              Forgot Password?
-            </Typography>
-          </Stack>
+
           <Stack sx={{ width: "100%" }}>
             <Button
               variant="contained"
@@ -232,15 +212,21 @@ const LoginForm = () => {
                 height: "50px",
               }}
             >
-              Log In
+              Register
             </Button>
+          </Stack>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+            sx={{ width: "100%" }}
+          >
             <Typography
               variant="body2"
-              sx={{ fontWeight: "500", textAlign: "center", mt: 1 }}
+              sx={{ fontWeight: "500" }}
               color="text.secondary"
             >
-              Don't have an acount?{" "}
-              <Link to="/auth/register">Register here</Link>
+              Already have an acount? <Link to="/auth/login">Signin</Link>
             </Typography>
           </Stack>
         </Stack>
@@ -249,4 +235,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignupForm;

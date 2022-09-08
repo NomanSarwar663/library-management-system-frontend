@@ -5,12 +5,11 @@ import axios from "../utils/axios";
 const GetAllBooks = async () => {
   const response = await axios.get("/books");
   const { data } = response;
-  console.log(data);
   return data;
 };
 
 // get all books
-const GetBookDetail = async ({ bookId }) => {
+const GetBookDetail = async (bookId) => {
   const response = await axios.get(`/book/${bookId}`);
   const { data } = response;
   console.log(data);
