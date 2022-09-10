@@ -102,17 +102,7 @@ const SignupForm = () => {
               <Alert severity="error">{errors.afterSubmit}</Alert>
             )}
           </Stack>
-          <Stack sx={{ width: "100%", py: 2.5 }}>
-            <Divider>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "500" }}
-                color="text.secondary"
-              >
-                OR
-              </Typography>
-            </Divider>
-          </Stack>
+
           <Stack direction="row" spacing={2} width="100%">
             <TextField
               variant="outlined"

@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 // components
 import CheckInDetail from "../component/CheckIn/CheckInDetail";
 
+
 const CheckIn = () => {
   const bookData = {
     id: 1,
@@ -30,7 +31,7 @@ const CheckIn = () => {
             Check-in Details
           </Typography>
           <Box mt="30px" sx={{ width: "100%" }}>
-            <CheckInDetail data={bookData}/>
+            <CheckInDetail data={bookData} />
           </Box>
         </Box>
       </Container>

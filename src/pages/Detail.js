@@ -5,42 +5,62 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 // components
 import BookDetail from "../component/Detail/BookDetail";
+import { useParams } from "react-router-dom";
+import { GetBookDetail } from "../Api";
+import { CircularProgress, Stack } from "@mui/material";
 
 const Detail = () => {
-  const bookData = {
-    id: 1,
-    title: "How to program in C to program in C",
-    isbn: 56964589645678,
-    publishYear: 2019,
-    price: 300,
-    status: "checkIn",
+  const [bookDetail, setBookDetail] = React.useState({});
+  const { bookId } = useParams();
+  console.log(bookId);
+
+  const GetDetail = async () => {
+    const result = await GetBookDetail(bookId);
+    console.log(result.book);
+    setBookDetail(result.data);
   };
+
+  React.useEffect(() => {
+    GetDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box width="100%">
       <Container>
-        <Box
-          p="2%"
-          pb="3%"
-          display="flex"
-          flexWrap="wrap"
-          justifyContent="center"
-        >
-          <Typography variant="h4" fontWeight="600">
-            Book Detail Page
-          </Typography>
-          <Box
-            mt="30px"
-            sx={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+        {Object.keys(bookDetail).length === 0 ? (
+          <Stack
+            alignItems="center"
+            justifyContent="center"
+            sx={{ height: "100vh" }}
           >
-            <BookDetail data={bookData} />
+            <CircularProgress />
+          </Stack>
+        ) : (
+          <Box
+            p="2%"
+            pb="3%"
+            display="flex"
+            flexWrap="wrap"
+            justifyContent="center"
+          >
+            <Typography variant="h4" fontWeight="600">
+              Book Detail Page
+            </Typography>
+
+            <Box
+              mt="30px"
+              sx={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <BookDetail data={bookDetail} />
+            </Box>
           </Box>
-        </Box>
+        )}
       </Container>
     </Box>
   );

@@ -228,7 +228,7 @@ const TopBar = ({ book }) => {
             variant="contained"
             disableElevation
             disabled={book.status === "check-in" ? true : false}
-            onClick={() => navigate("/book/1234/check-in")}
+            onClick={() => navigate(`/book/${book._id}/check-in`)}
             sx={{
               width: "120",
               display: book.status === "check-in" ? "none" : "block",
@@ -239,10 +239,10 @@ const TopBar = ({ book }) => {
           <Button
             variant="contained"
             disableElevation
-            disabled={book.status === "checkout" ? true : false}
-            onClick={() => navigate("/book/1234/check-out")}
+            disabled={book.status === "check-out" ? true : false}
+            onClick={() => navigate(`/book/${book._id}/check-out`)}
             sx={{
-              display: book.status === "checkout" ? "none" : "block",
+              display: book.status === "check-out" ? "none" : "block",
               width: "120",
             }}
           >

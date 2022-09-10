@@ -131,7 +131,7 @@ const IssuedHistoryTable = ({ data }) => {
                             sx={{ pl: 2 }}
                           >
                             <Typography variant="body1" noWrap>
-                              {row.name}
+                              {row.issuer?.name}
                             </Typography>
                           </Stack>
                         </StyledTableCell>

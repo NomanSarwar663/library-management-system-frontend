@@ -38,7 +38,7 @@ const Router = () => {
       />
       ,
       <Route
-        path="/book/:id/check-in"
+        path="/book/:bookId/check-in"
         element={
           <AuthGuard>
             <CheckInPage />
@@ -47,7 +47,7 @@ const Router = () => {
       />
       ,
       <Route
-        path="/book/:id/check-out"
+        path="/book/:bookId/check-out"
         element={
           <AuthGuard>
             <CheckOutPage />
