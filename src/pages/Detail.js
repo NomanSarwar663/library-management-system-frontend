@@ -1,4 +1,6 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
+// notistack
+import { useSnackbar } from "notistack";
 // mui
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -10,25 +12,38 @@ import { GetBookDetail } from "../Api";
 import { CircularProgress, Stack } from "@mui/material";
 
 const Detail = () => {
-  const [bookDetail, setBookDetail] = React.useState({});
+  const [bookDetail, setBookDetail] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const { bookId } = useParams();
-  console.log(bookId);
+  const { enqueueSnackbar } = useSnackbar();
 
-  const GetDetail = async () => {
-    const result = await GetBookDetail(bookId);
-    console.log(result.book);
-    setBookDetail(result.data);
-  };
+  useEffect(() => {
+    const GetDetail = async (id) => {
+      setIsLoading(true);
+      try {
+        const result = await GetBookDetail(id);
 
-  React.useEffect(() => {
-    GetDetail();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+        if (result && result.data) {
+          setBookDetail(result.data);
+        } else {
+          setBookDetail(null);
+          enqueueSnackbar("Fetch detail failed!", { variant: "error" });
+        }
+      } catch (error) {
+        console.log("Error", error);
+        enqueueSnackbar("Error occured!", { variant: "error" });
+        setBookDetail(null);
+      }
+      setIsLoading(false);
+    };
+
+    GetDetail(bookId);
+  }, [bookId]);
 
   return (
     <Box width="100%">
       <Container>
-        {Object.keys(bookDetail).length === 0 ? (
+        {isLoading ? (
           <Stack
             alignItems="center"
             justifyContent="center"
@@ -47,7 +62,6 @@ const Detail = () => {
             <Typography variant="h4" fontWeight="600">
               Book Detail Page
             </Typography>
-
             <Box
               mt="30px"
               sx={{

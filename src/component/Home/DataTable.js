@@ -41,121 +41,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const rows = [
-  {
-    id: 1,
-    title: "How to program in C to program in C",
-    isbn: 56964589645678,
-    publishYear: 2019,
-    price: 300,
-    status: "checkIn",
-  },
-  {
-    id: 2,
-    title: "Math",
-    isbn: 34267345245454,
-    publishYear: 2020,
-    price: 500,
-    status: "checkout",
-  },
-  {
-    id: 3,
-    title: "How to program in C to program in C",
-    isbn: 56964589645678,
-    publishYear: 2019,
-    price: 300,
-    status: "checkIn",
-  },
-  {
-    id: 4,
-    title: "Math",
-    isbn: 34267345245454,
-    publishYear: 2020,
-    price: 500,
-    status: "checkout",
-  },
-  {
-    id: 5,
-    title: "How to program in C to program in C",
-    isbn: 56964589645678,
-    publishYear: 2019,
-    price: 300,
-    status: "checkIn",
-  },
-  {
-    id: 6,
-    title: "Math",
-    isbn: 34267345245454,
-    publishYear: 2020,
-    price: 500,
-    status: "checkout",
-  },
-  {
-    id: 7,
-    title: "How to program in C to program in C",
-    isbn: 56964589645678,
-    publishYear: 2019,
-    price: 300,
-    status: "checkIn",
-  },
-  {
-    id: 8,
-    title: "Math",
-    isbn: 34267345245454,
-    publishYear: 2020,
-    price: 500,
-    status: "checkout",
-  },
-  {
-    id: 9,
-    title: "How to program in C to program in C",
-    isbn: 56964589645678,
-    publishYear: 2019,
-    price: 300,
-    status: "checkIn",
-  },
-  {
-    id: 10,
-    title: "Math",
-    isbn: 34267345245454,
-    publishYear: 2020,
-    price: 500,
-    status: "checkout",
-  },
-  {
-    id: 11,
-    title: "How to program in C to program in C",
-    isbn: 56964589645678,
-    publishYear: 2019,
-    price: 300,
-    status: "checkIn",
-  },
-  {
-    id: 12,
-    title: "Math",
-    isbn: 34267345245454,
-    publishYear: 2020,
-    price: 500,
-    status: "checkout",
-  },
-  {
-    id: 13,
-    title: "How to program in C to program in C",
-    isbn: 56964589645678,
-    publishYear: 2019,
-    price: 300,
-    status: "checkIn",
-  },
-  {
-    id: 14,
-    title: "Math",
-    isbn: 34267345245454,
-    publishYear: 2020,
-    price: 500,
-    status: "checkout",
-  },
-];
-
 const columns = [
   {
     id: "title",
@@ -268,7 +153,7 @@ TopBar.propTypes = {
   book: PropTypes.object.isRequired,
 };
 
-const DataTable = ({ books = rows }) => {
+const DataTable = ({ books }) => {
   const [selectedRowId, setSelectedRowId] = React.useState(-1);
   const rowsPerPage = 10;
   const [page, setPage] = React.useState(0);

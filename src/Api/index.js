@@ -16,9 +16,9 @@ const GetBookDetail = async (bookId) => {
   return data;
 };
 
-// get check in detail
-const GetCheckInDetail = async ({ bookId }) => {
-  const response = await axios.get(`/book/${bookId}/check-in`);
+// get Issued Book Detail
+const GetIssuedBookDetail = async (bookId) => {
+  const response = await axios.get(`book/${bookId}/issued-details`);
   const { data } = response;
   console.log(data);
   return data;
@@ -53,7 +53,7 @@ const PostBookCheckIn = async (bookId) => {
 export {
   GetAllBooks,
   GetBookDetail,
-  GetCheckInDetail,
+  GetIssuedBookDetail,
   PostCheckOutDetail,
   PostBookCheckIn,
 };

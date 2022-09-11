@@ -4,9 +4,6 @@ import { Box, Typography, Stack, Alert, Grid, Chip } from "@mui/material";
 import IssuedHistoryTable from "./IssuedHistoryTable";
 
 const BookDetail = ({ data }) => {
-  console.log(data.book.issuedDetails?.issuer?.name);
-
-  console.log("the book is", data.book);
 
   return (
     <Box
@@ -159,7 +156,7 @@ const BookDetail = ({ data }) => {
                   variant="outlined"
                   sx={{ display: "flex", alignItems: "center" }}
                 >
-                  This Book is Not Issued Yet
+                  This Book is not Currently Issued!
                 </Alert>
               </Stack>
             )}

@@ -9,6 +9,8 @@
     "@date-io/moment": "^2.15.0",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@iconify/icons-eva": "^1.2.3",
+    "@iconify/react": "^4.0.0",
     "@mui/icons-material": "^5.10.3",
     "@mui/lab": "^5.0.0-alpha.97",
     "@mui/material": "^5.10.3",

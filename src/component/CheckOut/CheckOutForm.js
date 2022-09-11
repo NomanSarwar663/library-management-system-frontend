@@ -1,33 +1,42 @@
+import { useEffect, useState } from "react";
+// react-router-dom
+import { useParams, useNavigate } from "react-router-dom";
+// mui
 import { TextField, Stack, Button } from "@mui/material";
-import React from "react";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+// Date picker
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useNavigate } from "react-router-dom";
 import InputMask from "react-input-mask";
 // formik
 import { useFormik, Form, FormikProvider } from "formik";
 // Yup
 import * as Yup from "yup";
-// hooks
+// API
 import { PostCheckOutDetail } from "../../Api";
+// hooks
 import moment from "moment-business-days";
 import * as rMoment from "moment";
 
-const CheckOutForm = ({ bookId }) => {
-  const [checkOutDate, setCheckOutDate] = React.useState(new Date());
-  // calculating the date after 15 business days
-  const calcReturnDate = rMoment(
-    moment(checkOutDate, "MM-DD-YYYY").businessAdd(15)._d
-  ).format("MM-DD-YYYY");
-  const [checkInDate, setCheckInDate] = React.useState(calcReturnDate);
-
-  React.useEffect(() => {
-    setCheckInDate(calcReturnDate);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkOutDate]);
-
+const CheckOutForm = () => {
+  const { bookId } = useParams();
+  const [checkInDate, setCheckInDate] = useState(null);
+  const [checkOutDate, setCheckOutDate] = useState(new Date());
   const navigate = useNavigate();
+
+  const calcReturnDate = (checkOutDate, businessDays) => {
+    // calculating the date after business days
+    return rMoment(
+      moment(checkOutDate, "MM/DD/YYYY").businessAdd(businessDays)._d
+    ).format("MM/DD/YYYY");
+  };
+
+  useEffect(() => {
+    // 15 are the default business days
+    const date = calcReturnDate(checkOutDate, 15);
+
+    setCheckInDate(date);
+  }, [checkOutDate]);
 
   const CheckOutSchema = Yup.object().shape({
     name: Yup.string().required("The Name of Borrower is required."),

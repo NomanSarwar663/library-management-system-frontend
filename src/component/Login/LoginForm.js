@@ -183,7 +183,6 @@ const LoginForm = () => {
                       sx={{
                         height: "24px",
                         width: "24px",
-                        background: "#efefef",
                         borderRadius: 2,
                       }}
                     ></Box>

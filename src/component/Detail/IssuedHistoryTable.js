@@ -1,4 +1,5 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
+// mui
 import { styled } from "@mui/material/styles";
 import {
   Box,
@@ -14,6 +15,8 @@ import {
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+// moment library
+import moment from "moment";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -35,60 +38,31 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, checkInDate, checkOutDate) {
-  return {
-    name,
-    checkInDate,
-    checkOutDate,
-  };
-}
-
-const rows = [
-  createData("Karen", "01/09/2022", "21/08/2022"),
-  createData("Esperanza Mcintyre", "01/09/2022", "21/08/2022"),
-  createData("Brycen Jimenez", "01/09/2022", "21/08/2022"),
-  createData("Melanie Noble", "01/09/2022", "21/08/2022"),
-  createData("Theresa", "01/09/2022", "21/08/2022"),
-  createData("John", "01/09/2022", "21/08/2022"),
-  createData("Jessica", "01/09/2022", "21/08/2022"),
-];
-
-const headCells = [
+const columns = [
   {
-    id: "name",
-    numeric: false,
-    disablePadding: true,
-    label: "Name",
+    id: 1,
+    title: "Name",
+    align: "left",
   },
   {
-    id: "check-in-date",
-    numeric: true,
-    disablePadding: false,
-    label: "CheckIn Date",
+    id: 2,
+    title: "CheckIn Date",
+    align: "center",
   },
   {
-    id: "check-out-date",
-    numeric: true,
-    disablePadding: false,
-    label: "CheckOut Date",
+    id: 3,
+    title: "CheckOut Date",
+    align: "right",
   },
 ];
 
 const IssuedHistoryTable = ({ data }) => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(0);
+  const rowsPerPage = 5;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
     <Box sx={{ width: "100%", borderRadius: 5 }}>
@@ -102,13 +76,13 @@ const IssuedHistoryTable = ({ data }) => {
             >
               <TableHead>
                 <TableRow sx={{ bgcolor: "#808080", color: "#fff" }}>
-                  {headCells.map((cell) => (
+                  {columns.map((cell) => (
                     <TableCell
-                      align="left"
+                      align={cell.align}
                       key={cell.id}
                       sx={{ color: "#fff" }}
                     >
-                      {cell.label}
+                      {cell.title}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -122,48 +96,35 @@ const IssuedHistoryTable = ({ data }) => {
                         <StyledTableCell
                           component="th"
                           scope="row"
-                          padding="none"
+                          sx={{ pl: 2 }}
                         >
-                          <Stack
-                            direction="row"
-                            alignItems="center"
-                            spacing={2}
-                            sx={{ pl: 2 }}
-                          >
+                          <Stack direction="row" alignItems="center">
                             <Typography variant="body1" noWrap>
                               {row.issuer?.name}
                             </Typography>
                           </Stack>
                         </StyledTableCell>
-                        <StyledTableCell align="left">
-                          {row.checkInDate}
+                        <StyledTableCell align="center">
+                          {row.checkInDate &&
+                            moment(row.checkInDate).format("MM/DD/YYYY")}
                         </StyledTableCell>
-                        <StyledTableCell align="left">
-                          {row.checkOutDate}
+                        <StyledTableCell align="right">
+                          {row.checkOutDate &&
+                            moment(row.checkOutDate).format("MM/DD/YYYY")}
                         </StyledTableCell>
                       </StyledTableRow>
                     );
                   })}
-                {emptyRows > 0 && (
-                  <StyledTableRow
-                    style={{
-                      height: 53 * emptyRows,
-                    }}
-                  >
-                    <StyledTableCell colSpan={6} />
-                  </StyledTableRow>
-                )}
               </TableBody>
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={rows.length}
+            count={data.length}
             rowsPerPage={rowsPerPage}
+            rowsPerPageOptions={[]}
             page={page}
             onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
       ) : (
