@@ -7,8 +7,25 @@ import NotistackProvider from "./component/NotistackProvider";
 import Router from "./routes";
 import reportWebVitals from "./reportWebVitals";
 import { CircularProgress } from "@mui/material";
+import moment from "moment-business-days";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// put the holidays (MM-DD) in this array so they can be exclude while calculating the late penalty
+const holidays = [
+  "02/05", // Kashmir day
+  "03/23", // Pakistan Day
+  "04/04", // Death of Zulfiqar Ali Bhutto
+  "05/01", // Labour Day
+  "08/14", // Independence day
+  "12/25", // Quaid-e-Azam day
+  "12/27"  // Anniversary of Benazir Bhutto's Death
+];
+
+moment.updateLocale("us", {
+  holidays,
+  holidayFormat: "MM/DD",
+});
 
 root.render(
   <BrowserRouter>

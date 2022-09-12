@@ -12,7 +12,6 @@ const GetAllBooks = async () => {
 const GetBookDetail = async (bookId) => {
   const response = await axios.get(`/book/${bookId}`);
   const { data } = response;
-  console.log(data);
   return data;
 };
 
@@ -20,25 +19,21 @@ const GetBookDetail = async (bookId) => {
 const GetIssuedBookDetail = async (bookId) => {
   const response = await axios.get(`book/${bookId}/issued-details`);
   const { data } = response;
-  console.log(data);
   return data;
 };
 
 // post check-out details
 const PostCheckOutDetail = async (details) => {
-  let { bookId, name, phoneNo, nationalID, checkOutDate } = details;
-  console.log("nationalID", nationalID);
-  console.log("checkOutDate", checkOutDate);
+  let { bookId, name, phoneNo, nationalID, checkOutDate, returnDate } = details;
   const response = await axios.post(`/book/${bookId}/check-out`, {
     bookId,
     name,
     phoneNo,
     nationalID,
     checkOutDate,
-    returnDate: "2022-09-15T17:38:55.267Z",
+    returnDate
   });
   const { data } = response;
-  console.log(data);
   return data;
 };
 
@@ -46,7 +41,6 @@ const PostCheckOutDetail = async (details) => {
 const PostBookCheckIn = async (bookId) => {
   const response = await axios.post(`/book/${bookId}/check-in`);
   const { data } = response;
-  console.log(data);
   return data;
 };
 
