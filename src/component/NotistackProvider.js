@@ -6,7 +6,6 @@ import alertCircleFill from "@iconify/icons-eva/alert-circle-fill";
 import checkmarkCircle2Fill from "@iconify/icons-eva/checkmark-circle-2-fill";
 // mui
 import { Box, GlobalStyles } from "@mui/material";
-// ----------------------------------------------------------------------
 
 function SnackbarStyles() {
   return (

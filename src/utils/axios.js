@@ -2,8 +2,6 @@ import axios from "axios";
 // configuration
 const baseURL = "https://library-management-app-node.herokuapp.com/";
 
-// ----------------------------------------------------------------------
-
 const axiosInstance = axios.create({
   baseURL,
   headers: {

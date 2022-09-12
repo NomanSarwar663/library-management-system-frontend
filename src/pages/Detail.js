@@ -38,8 +38,7 @@ const Detail = () => {
     };
 
     GetDetail(bookId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bookId]);
+  }, [bookId, enqueueSnackbar]);
 
   return (
     <Box width="100%">

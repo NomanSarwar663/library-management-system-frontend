@@ -58,11 +58,8 @@ const SignupForm = () => {
     },
     validationSchema: LoginSchema,
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
-      console.log(values);
-
       try {
         const result = await signUp(values);
-        console.log(result);
         if (result && result.status === "Success") {
           enqueueSnackbar("Signup success!", { variant: "success" });
           await delay(200);

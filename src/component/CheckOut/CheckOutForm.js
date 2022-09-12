@@ -65,19 +65,12 @@ const CheckOutForm = () => {
     validationSchema: CheckOutSchema,
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
-        console.log({
-          bookId,
-          ...values,
-          checkOutDate: rMoment(checkOutDate).format(),
-          returnDate: rMoment(checkInDate).format(),
-        });
         const result = await PostCheckOutDetail({
           bookId,
           ...values,
           checkOutDate: rMoment(checkOutDate).format(),
           returnDate: rMoment(checkInDate).format(),
         });
-        console.log(result);
         if (result && result.status === "Success") {
           enqueueSnackbar("Post success!", { variant: "success" });
           await delay(500);
@@ -87,7 +80,6 @@ const CheckOutForm = () => {
           enqueueSnackbar("Post failed!", { variant: "error" });
         }
       } catch (error) {
-        // resetForm();
         setSubmitting(false);
         setErrors({ afterSubmit: error.message });
         enqueueSnackbar("Error occured!", { variant: "error" });
@@ -167,8 +159,6 @@ const CheckOutForm = () => {
               label="Checkout Date"
               value={checkOutDate}
               onChange={(newValue) => {
-                // const newDate = convertDate(newValue);
-                console.log(newValue);
                 setCheckOutDate(newValue);
               }}
               renderInput={(params) => (
@@ -188,7 +178,6 @@ const CheckOutForm = () => {
               label="Return Date"
               value={checkInDate}
               onChange={(newValue) => {
-                console.log(newValue);
                 setCheckInDate(newValue);
               }}
               renderInput={(params) => (

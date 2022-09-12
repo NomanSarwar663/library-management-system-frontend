@@ -56,11 +56,8 @@ const LoginForm = () => {
     },
     validationSchema: LoginSchema,
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
-      console.log(values);
-
       try {
         const result = await signIn(values.email, values.password);
-        console.log(result);
         if (result && result.status === "Success") {
           enqueueSnackbar("Login success", { variant: "success" });
           // navigate("/books");
