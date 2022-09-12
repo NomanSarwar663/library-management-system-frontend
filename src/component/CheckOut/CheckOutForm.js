@@ -1,64 +1,96 @@
+import { useEffect, useState } from "react";
+// react-router-dom
+import { useParams, useNavigate } from "react-router-dom";
+// notistack
+import { useSnackbar } from "notistack";
+// mui
 import { TextField, Stack, Button } from "@mui/material";
-import React from "react";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+// Date picker
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useNavigate } from "react-router-dom";
 import InputMask from "react-input-mask";
 // formik
 import { useFormik, Form, FormikProvider } from "formik";
 // Yup
 import * as Yup from "yup";
-// hooks
+// API
 import { PostCheckOutDetail } from "../../Api";
+// hooks
+import moment from "moment-business-days";
+import * as rMoment from "moment";
+
+const delay = ms => new Promise(
+  resolve => setTimeout(resolve, ms)
+);
+
 
 const CheckOutForm = () => {
-  const [date, setDate] = React.useState(new Date());
-
-  function convertDate(inputFormat) {
-    function pad(s) {
-      return s < 10 ? "0" + s : s;
-    }
-    var d = new Date(inputFormat);
-    return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join("/");
-  }
-
+  const { bookId } = useParams();
+  const [checkInDate, setCheckInDate] = useState(null);
+  const [checkOutDate, setCheckOutDate] = useState(new Date());
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+
+  const calcReturnDate = (checkOutDate, businessDays) => {
+    // calculating the date after business days
+    return rMoment(
+      moment(checkOutDate, "MM/DD/YYYY").businessAdd(businessDays)._d
+    ).format("MM/DD/YYYY");
+  };
+
+  useEffect(() => {
+    // 15 are the default business days
+    const date = calcReturnDate(checkOutDate, 15);
+
+    setCheckInDate(date);
+  }, [checkOutDate]);
 
   const CheckOutSchema = Yup.object().shape({
     name: Yup.string().required("The Name of Borrower is required."),
     phoneNo: Yup.string().required("The Phone Number  is required."),
-    NIC: Yup.string().required("The NIC of Borrower is required."),
+    nationalID: Yup.string().required(
+      "The nationalID of Borrower is required."
+    ),
   });
-
   // formik
   const formik = useFormik({
     initialValues: {
       name: "",
       phoneNo: "",
-      NIC: "",
-      checkoutDate: "",
+      nationalID: "",
+      checkOutDate: "",
+      returnDate: "",
     },
     validationSchema: CheckOutSchema,
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
-        let newDate = convertDate(date);
-        console.log({ ...values, checkoutDate: newDate });
-        const result = await PostCheckOutDetail({
-          bookId: "123",
+        console.log({
+          bookId,
           ...values,
-          checkoutDate: newDate,
+          checkOutDate: rMoment(checkOutDate).format(),
+          returnDate: rMoment(checkInDate).format(),
+        });
+        const result = await PostCheckOutDetail({
+          bookId,
+          ...values,
+          checkOutDate: rMoment(checkOutDate).format(),
+          returnDate: rMoment(checkInDate).format(),
         });
         console.log(result);
         if (result && result.status === "Success") {
+          enqueueSnackbar("Post success!", { variant: "success" });
+          await delay(500);
           navigate("/books");
         } else {
           setErrors({ afterSubmit: result?.message || "Login failed" });
+          enqueueSnackbar("Post failed!", { variant: "error" });
         }
       } catch (error) {
-        resetForm();
+        // resetForm();
         setSubmitting(false);
         setErrors({ afterSubmit: error.message });
+        enqueueSnackbar("Error occured!", { variant: "error" });
       }
     },
   });
@@ -108,44 +140,18 @@ const CheckOutForm = () => {
               />
             )}
           </InputMask>
-          {/* <TextField
-            variant="outlined"
-            label="Phone Number"
-            type="number"
-            {...getFieldProps("phoneNo")}
-            error={Boolean(touched.phoneNo && errors.phoneNo)}
-            helperText={touched.phoneNo && errors.phoneNo}
-            sx={{
-              [`& fieldset`]: {
-                borderRadius: 3,
-              },
-            }}
-          /> */}
-          {/* <TextField
-            variant="outlined"
-            label="National ID"
-            type="number"
-            {...getFieldProps("NIC")}
-            error={Boolean(touched.NIC && errors.NIC)}
-            helperText={touched.NIC && errors.NIC}
-            sx={{
-              [`& fieldset`]: {
-                borderRadius: 3,
-              },
-            }}
-          /> */}
           <InputMask
             mask="99999999999"
-            value={values.NIC}
+            value={values.nationalID}
             disabled={false}
             maskChar=" "
-            onChange={(e) => setFieldValue("NIC", e.target.value)}
+            onChange={(e) => setFieldValue("nationalID", e.target.value)}
           >
             {() => (
               <TextField
                 label="National ID"
-                error={Boolean(touched.NIC && errors.NIC)}
-                helperText={touched.NIC && errors.NIC}
+                error={Boolean(touched.nationalID && errors.nationalID)}
+                helperText={touched.nationalID && errors.nationalID}
                 sx={{
                   [`& fieldset`]: {
                     borderRadius: 3,
@@ -159,11 +165,31 @@ const CheckOutForm = () => {
               openTo="year"
               views={["year", "month", "day"]}
               label="Checkout Date"
-              value={date}
+              value={checkOutDate}
               onChange={(newValue) => {
-                const newDate = convertDate(newValue);
-                console.log(newDate);
-                setDate(newDate);
+                // const newDate = convertDate(newValue);
+                console.log(newValue);
+                setCheckOutDate(newValue);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  sx={{
+                    [`& fieldset`]: {
+                      borderRadius: 3,
+                    },
+                  }}
+                />
+              )}
+            />
+            <DatePicker
+              openTo="year"
+              views={["year", "month", "day"]}
+              label="Return Date"
+              value={checkInDate}
+              onChange={(newValue) => {
+                console.log(newValue);
+                setCheckInDate(newValue);
               }}
               renderInput={(params) => (
                 <TextField

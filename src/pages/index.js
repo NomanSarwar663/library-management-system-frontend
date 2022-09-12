@@ -7,11 +7,11 @@ import CheckOutPage from "./CheckOut";
 import Page404 from "./Page404";
 
 export {
+  SignupPage,
   LoginPage,
   HomePage,
   DetailPage,
   CheckInPage,
   CheckOutPage,
-  Page404,
-  SignupPage,
+  Page404
 };

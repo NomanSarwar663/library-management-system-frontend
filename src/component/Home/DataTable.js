@@ -11,12 +11,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
-
 import Radio from "@mui/material/Radio";
-
-// import IconButton from "@mui/material/IconButton";
-// import Tooltip from "@mui/material/Tooltip";
-// import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
@@ -32,6 +27,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  cursor: "pointer",
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
@@ -40,121 +36,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-
-const rows = [
-  {
-    id: 1,
-    title: "How to program in C to program in C",
-    isbn: 56964589645678,
-    publishYear: 2019,
-    price: 300,
-    status: "checkIn",
-  },
-  {
-    id: 2,
-    title: "Math",
-    isbn: 34267345245454,
-    publishYear: 2020,
-    price: 500,
-    status: "checkout",
-  },
-  {
-    id: 3,
-    title: "How to program in C to program in C",
-    isbn: 56964589645678,
-    publishYear: 2019,
-    price: 300,
-    status: "checkIn",
-  },
-  {
-    id: 4,
-    title: "Math",
-    isbn: 34267345245454,
-    publishYear: 2020,
-    price: 500,
-    status: "checkout",
-  },
-  {
-    id: 5,
-    title: "How to program in C to program in C",
-    isbn: 56964589645678,
-    publishYear: 2019,
-    price: 300,
-    status: "checkIn",
-  },
-  {
-    id: 6,
-    title: "Math",
-    isbn: 34267345245454,
-    publishYear: 2020,
-    price: 500,
-    status: "checkout",
-  },
-  {
-    id: 7,
-    title: "How to program in C to program in C",
-    isbn: 56964589645678,
-    publishYear: 2019,
-    price: 300,
-    status: "checkIn",
-  },
-  {
-    id: 8,
-    title: "Math",
-    isbn: 34267345245454,
-    publishYear: 2020,
-    price: 500,
-    status: "checkout",
-  },
-  {
-    id: 9,
-    title: "How to program in C to program in C",
-    isbn: 56964589645678,
-    publishYear: 2019,
-    price: 300,
-    status: "checkIn",
-  },
-  {
-    id: 10,
-    title: "Math",
-    isbn: 34267345245454,
-    publishYear: 2020,
-    price: 500,
-    status: "checkout",
-  },
-  {
-    id: 11,
-    title: "How to program in C to program in C",
-    isbn: 56964589645678,
-    publishYear: 2019,
-    price: 300,
-    status: "checkIn",
-  },
-  {
-    id: 12,
-    title: "Math",
-    isbn: 34267345245454,
-    publishYear: 2020,
-    price: 500,
-    status: "checkout",
-  },
-  {
-    id: 13,
-    title: "How to program in C to program in C",
-    isbn: 56964589645678,
-    publishYear: 2019,
-    price: 300,
-    status: "checkIn",
-  },
-  {
-    id: 14,
-    title: "Math",
-    isbn: 34267345245454,
-    publishYear: 2020,
-    price: 500,
-    status: "checkout",
-  },
-];
 
 const columns = [
   {
@@ -228,7 +109,7 @@ const TopBar = ({ book }) => {
             variant="contained"
             disableElevation
             disabled={book.status === "check-in" ? true : false}
-            onClick={() => navigate("/book/1234/check-in")}
+            onClick={() => navigate(`/book/${book._id}/check-in`)}
             sx={{
               width: "120",
               display: book.status === "check-in" ? "none" : "block",
@@ -239,10 +120,10 @@ const TopBar = ({ book }) => {
           <Button
             variant="contained"
             disableElevation
-            disabled={book.status === "checkout" ? true : false}
-            onClick={() => navigate("/book/1234/check-out")}
+            disabled={book.status === "check-out" ? true : false}
+            onClick={() => navigate(`/book/${book._id}/check-out`)}
             sx={{
-              display: book.status === "checkout" ? "none" : "block",
+              display: book.status === "check-out" ? "none" : "block",
               width: "120",
             }}
           >
@@ -268,7 +149,7 @@ TopBar.propTypes = {
   book: PropTypes.object.isRequired,
 };
 
-const DataTable = ({ books = rows }) => {
+const DataTable = ({ books }) => {
   const [selectedRowId, setSelectedRowId] = React.useState(-1);
   const rowsPerPage = 10;
   const [page, setPage] = React.useState(0);
@@ -307,13 +188,12 @@ const DataTable = ({ books = rows }) => {
             {books
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((book) => {
-                const isItemSelected = selectedRowId === book.id;
+                const isItemSelected = selectedRowId === book._id;
 
                 return (
                   <StyledTableRow
                     hover
                     onClick={(event) => {
-                      console.log("The book is", book);
                       return handleClick(event, book._id);
                     }}
                     role="radio"

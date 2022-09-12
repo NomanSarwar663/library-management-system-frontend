@@ -1,8 +1,9 @@
 import React from "react";
+// notistack
+import { useSnackbar } from "notistack";
 import {
   Stack,
   Typography,
-  Divider,
   TextField,
   InputAdornment,
   IconButton,
@@ -21,8 +22,13 @@ import * as Yup from "yup";
 // hooks
 import useAuth from "../../Hooks/useAuth";
 
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const SignupForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const { signUp } = useAuth();
+  const navigate = useNavigate();
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -31,10 +37,6 @@ const SignupForm = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
-  const { signUp } = useAuth();
-  const navigate = useNavigate();
-  // const { enqueueSnackbar } = useSnackbar();
 
   // validation schema
   const LoginSchema = Yup.object().shape({
@@ -62,13 +64,17 @@ const SignupForm = () => {
         const result = await signUp(values);
         console.log(result);
         if (result && result.status === "Success") {
+          enqueueSnackbar("Signup success!", { variant: "success" });
+          await delay(200);
           navigate("/books");
         } else {
+          enqueueSnackbar("Signup failed!", { variant: "error" });
           setErrors({ afterSubmit: result?.message || "Login failed" });
         }
       } catch (error) {
         resetForm();
         setSubmitting(false);
+        enqueueSnackbar("Signup failed!", { variant: "error" });
         setErrors({ afterSubmit: error.message });
       }
     },
@@ -102,17 +108,7 @@ const SignupForm = () => {
               <Alert severity="error">{errors.afterSubmit}</Alert>
             )}
           </Stack>
-          <Stack sx={{ width: "100%", py: 2.5 }}>
-            <Divider>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "500" }}
-                color="text.secondary"
-              >
-                OR
-              </Typography>
-            </Divider>
-          </Stack>
+
           <Stack direction="row" spacing={2} width="100%">
             <TextField
               variant="outlined"

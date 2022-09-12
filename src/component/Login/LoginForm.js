@@ -1,9 +1,10 @@
 import React from "react";
+// notistack
+import { useSnackbar } from "notistack";
 import {
   Box,
   Stack,
   Typography,
-  Divider,
   TextField,
   InputAdornment,
   IconButton,
@@ -17,7 +18,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import LockIcon from "@mui/icons-material/Lock";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 // formik
 import { useFormik, Form, FormikProvider } from "formik";
 // Yup
@@ -37,8 +38,7 @@ const LoginForm = () => {
   };
 
   const { signIn } = useAuth();
-  const navigate = useNavigate();
-  // const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   // validation schema
   const LoginSchema = Yup.object().shape({
@@ -62,7 +62,8 @@ const LoginForm = () => {
         const result = await signIn(values.email, values.password);
         console.log(result);
         if (result && result.status === "Success") {
-          navigate("/books");
+          enqueueSnackbar("Login success", { variant: "success" });
+          // navigate("/books");
         } else {
           setErrors({ afterSubmit: result?.message || "Login failed" });
         }
@@ -109,17 +110,7 @@ const LoginForm = () => {
               <Alert severity="error">{errors.afterSubmit}</Alert>
             )}
           </Stack>
-          <Stack sx={{ width: "100%", py: 2.5 }}>
-            <Divider>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "500" }}
-                color="text.secondary"
-              >
-                OR
-              </Typography>
-            </Divider>
-          </Stack>
+
           <Stack spacing={2} sx={{ width: "100%" }}>
             <TextField
               variant="outlined"
@@ -193,7 +184,6 @@ const LoginForm = () => {
                       sx={{
                         height: "24px",
                         width: "24px",
-                        background: "#efefef",
                         borderRadius: 2,
                       }}
                     ></Box>
@@ -213,13 +203,6 @@ const LoginForm = () => {
                 </>
               }
             />
-            <Typography
-              variant="body2"
-              sx={{ fontWeight: "500" }}
-              color="text.secondary"
-            >
-              Forgot Password?
-            </Typography>
           </Stack>
           <Stack sx={{ width: "100%" }}>
             <Button

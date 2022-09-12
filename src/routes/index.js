@@ -1,13 +1,13 @@
+import React from "react";
 import {
   LoginPage,
-  HomePage,
   DetailPage,
+  HomePage,
   CheckInPage,
   CheckOutPage,
   Page404,
   SignupPage,
 } from "../pages";
-
 import { Routes, Route, Navigate } from "react-router-dom";
 import AuthGuard from "../Guards/AuthGuard";
 
@@ -16,7 +16,8 @@ const Router = () => {
     <Routes>
       {/* Auth route */}
       <Route path="/auth/login" element={<LoginPage />} />,{/* App routes */}
-      <Route path="/auth/register" element={<SignupPage />} />,{/* App routes */}
+      <Route path="/auth/register" element={<SignupPage />} />,
+      {/* App routes */}
       <Route path="/" element={<Navigate to="/books" />} />
       ,
       <Route
@@ -38,7 +39,7 @@ const Router = () => {
       />
       ,
       <Route
-        path="/book/:id/check-in"
+        path="/book/:bookId/check-in"
         element={
           <AuthGuard>
             <CheckInPage />
@@ -47,7 +48,7 @@ const Router = () => {
       />
       ,
       <Route
-        path="/book/:id/check-out"
+        path="/book/:bookId/check-out"
         element={
           <AuthGuard>
             <CheckOutPage />

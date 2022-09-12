@@ -1,28 +1,9 @@
 import * as React from "react";
-// propTypes
-import PropTypes from "prop-types";
 // mui
 import { Box, Typography, Stack, Alert, Grid, Chip } from "@mui/material";
 import IssuedHistoryTable from "./IssuedHistoryTable";
-import { useParams } from "react-router-dom";
-import { GetBookDetail } from "../../Api";
 
-const BookDetail = () => {
-  const [book, setBook] = React.useState({});
-  const { bookId } = useParams();
-  console.log(bookId);
-
-  const GetDetail = async () => {
-    const result = await GetBookDetail(bookId);
-    console.log(result);
-    setBook(result.book);
-  };
-
-  React.useEffect(() => {
-    GetDetail();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+const BookDetail = ({ data }) => {
   return (
     <Box
       width="100%"
@@ -39,25 +20,23 @@ const BookDetail = () => {
             >
               Book Details
             </Typography>
-            {book.issuedDetail ? (
+            {data.book.issuedDetails?.issuer && (
               <Stack>
                 <Alert
                   severity="warning"
                   sx={{ display: "flex", alignItems: "center" }}
                 >
-                  This Book is Currently Issued to{" "}
+                  This Book is Currently Issued to
                   <Typography
                     variant="subtitle1"
                     display="inline"
                     component="span"
                     sx={{ ml: 1 }}
                   >
-                    {book.issuedDetail.borrowerName}!
+                    {data.book.issuedDetails?.issuer?.name}!
                   </Typography>
                 </Alert>
               </Stack>
-            ) : (
-              <></>
             )}
             <Stack
               component="span"
@@ -68,7 +47,7 @@ const BookDetail = () => {
               <Typography variant="body2" fontWeight="600">
                 Book Title:
               </Typography>
-              <Typography variant="h6">{book.title}</Typography>
+              <Typography variant="body2">{data.book.title}</Typography>
             </Stack>
             <Stack
               component="span"
@@ -79,7 +58,7 @@ const BookDetail = () => {
               <Typography variant="body2" fontWeight="600">
                 ISBN:
               </Typography>
-              <Typography variant="body2">{book.isbn}</Typography>
+              <Typography variant="body2">{data.book.isbn}</Typography>
             </Stack>
             <Stack
               component="span"
@@ -90,7 +69,7 @@ const BookDetail = () => {
               <Typography variant="body2" fontWeight="600">
                 Publish Year:
               </Typography>
-              <Typography variant="body2">{book.publishYear}</Typography>
+              <Typography variant="body2">{data.book.publishYear}</Typography>
             </Stack>
             <Stack
               component="span"
@@ -101,7 +80,9 @@ const BookDetail = () => {
               <Typography variant="body2" fontWeight="600">
                 Cover price:
               </Typography>
-              <Typography variant="body2">{book.coverPrice} pkr</Typography>
+              <Typography variant="body2">
+                {data.book.coverPrice} pkr
+              </Typography>
             </Stack>
             <Stack
               component="span"
@@ -113,10 +94,10 @@ const BookDetail = () => {
                 Status:
               </Typography>
               <Box>
-                {book.status === "check-in" ? (
-                  <Chip label={book.status} color="success" />
+                {data.book.status === "check-in" ? (
+                  <Chip label={data.book.status} color="success" />
                 ) : (
-                  <Chip label={book.status} color="warning" />
+                  <Chip label={data.book.status} color="warning" />
                 )}
               </Box>
             </Stack>
@@ -136,7 +117,7 @@ const BookDetail = () => {
             >
               Issued Details
             </Typography>
-            {book.issuedDetail ? (
+            {data.book.issuedDetails?.issuer ? (
               <>
                 <Stack
                   component="span"
@@ -147,7 +128,9 @@ const BookDetail = () => {
                   <Typography variant="body2" fontWeight="600">
                     Issuer Name:
                   </Typography>
-                  <Typography variant="body2">Noman Sarwar</Typography>
+                  <Typography variant="body2">
+                    {data.book.issuedDetails?.issuer?.name}
+                  </Typography>
                 </Stack>
                 <Stack
                   component="span"
@@ -158,17 +141,19 @@ const BookDetail = () => {
                   <Typography variant="body2" fontWeight="600">
                     Phone no:
                   </Typography>
-                  <Typography variant="body2">03001234567</Typography>
+                  <Typography variant="body2">
+                    {data.book.issuedDetails.issuer.phoneNo}
+                  </Typography>
                 </Stack>
               </>
             ) : (
               <Stack>
                 <Alert
-                  severity="success"
+                  severity="info"
                   variant="outlined"
                   sx={{ display: "flex", alignItems: "center" }}
                 >
-                  This Book is Not Issued Yet
+                  This Book is not Currently Issued!
                 </Alert>
               </Stack>
             )}
@@ -187,16 +172,12 @@ const BookDetail = () => {
             >
               Issued History
             </Typography>
-            <IssuedHistoryTable data={book.issuedHistory} />
+            <IssuedHistoryTable data={data.bookHistory} />
           </Stack>
         </Grid>
       </Grid>
     </Box>
   );
-};
-
-BookDetail.propTypes = {
-  data: PropTypes.object.isRequired,
 };
 
 export default BookDetail;

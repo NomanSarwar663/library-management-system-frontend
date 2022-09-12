@@ -1,13 +1,44 @@
-import * as React from "react";
 // propTypes
 import PropTypes from "prop-types";
+// react-router-dom
+import { useParams, useNavigate } from "react-router-dom";
+// notistack
+import { useSnackbar } from "notistack";
 // mui
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+// API
+import { PostBookCheckIn } from "../../Api";
+// moment library
+import moment from "moment";
 
-const CheckInDetail = () => {
+const delay = ms => new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
+
+const CheckInDetail = ({ issuedDetail }) => {
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+  const { bookId } = useParams();
+
+  const checkInHandler = async () => {
+    try {
+      const result = await PostBookCheckIn(bookId);
+
+      if (result && result.status === "Success") {
+        enqueueSnackbar("Post success!", { variant: "success" });
+        await delay(500);
+        navigate("/books");
+      } else {
+        enqueueSnackbar("Post failed!", { variant: "error" });
+      }
+    } catch (e) {
+      enqueueSnackbar("Error occured", { variant: "error" });
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -33,7 +64,7 @@ const CheckInDetail = () => {
             }}
           ></Box>
         </Stack>
-        <Stack alignItems="center" spacing={1}>
+        <Stack alignItems="center" spacing={1} sx={{ mt: 2 }}>
           <Stack
             component="span"
             sx={{ width: "100%" }}
@@ -44,7 +75,7 @@ const CheckInDetail = () => {
             <Typography variant="body2" fontWeight="600">
               Issuer Name:
             </Typography>
-            <Typography variant="body2">Math</Typography>
+            <Typography variant="body2">{issuedDetail.issuer?.name}</Typography>
           </Stack>
           <Stack
             component="span"
@@ -54,9 +85,11 @@ const CheckInDetail = () => {
             spacing={2}
           >
             <Typography variant="body2" fontWeight="600">
-              Mobile Nummber:
+              Mobile Number:
             </Typography>
-            <Typography variant="body2">03001234567</Typography>
+            <Typography variant="body2">
+              {issuedDetail.issuer?.phoneNo}
+            </Typography>
           </Stack>
           <Stack
             component="span"
@@ -68,7 +101,9 @@ const CheckInDetail = () => {
             <Typography variant="body2" fontWeight="600">
               Actual Return Day:
             </Typography>
-            <Typography variant="body2">Today date</Typography>
+            <Typography variant="body2">
+              {moment().format("MM/DD/YYYY")}
+            </Typography>
           </Stack>
           <Stack
             component="span"
@@ -80,7 +115,10 @@ const CheckInDetail = () => {
             <Typography variant="body2" fontWeight="600">
               Required Return Day:
             </Typography>
-            <Typography variant="body2">22/10/2022</Typography>
+            <Typography variant="body2">
+              {issuedDetail?.returnDate &&
+                moment(issuedDetail.returnDate).format("MM/DD/YYYY")}
+            </Typography>
           </Stack>
           <Stack
             component="span"
@@ -96,7 +134,9 @@ const CheckInDetail = () => {
           </Stack>
         </Stack>
         <Stack sx={{ marginTop: "20px" }}>
-          <Button variant="outlined">Check-in</Button>
+          <Button variant="outlined" onClick={checkInHandler}>
+            Check-in
+          </Button>
         </Stack>
       </Box>
     </Box>
@@ -104,7 +144,7 @@ const CheckInDetail = () => {
 };
 
 CheckInDetail.propTypes = {
-  data: PropTypes.object.isRequired,
+  issuedDetail: PropTypes.object.isRequired,
 };
 
 export default CheckInDetail;

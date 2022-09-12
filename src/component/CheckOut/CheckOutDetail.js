@@ -1,11 +1,10 @@
 import * as React from "react";
-// propTypes
-import PropTypes from "prop-types";
 // mui
 import { Box, Stack } from "@mui/material";
 import CheckOutForm from "./CheckOutForm";
 
-const CheckOutDetail = ({ data }) => {
+const CheckOutDetail = ({ bookId }) => {
+
   return (
     <Box
       sx={{
@@ -42,15 +41,11 @@ const CheckOutDetail = ({ data }) => {
           width={{ xs: "100%", md: "50%" }}
           sx={{ pt: { xs: 3, md: 0 } }}
         >
-          <CheckOutForm />
+          <CheckOutForm bookId={bookId} />
         </Stack>
       </Stack>
     </Box>
   );
-};
-
-CheckOutDetail.propTypes = {
-  data: PropTypes.object.isRequired,
 };
 
 export default CheckOutDetail;
