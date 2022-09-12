@@ -38,6 +38,7 @@ const Detail = () => {
     };
 
     GetDetail(bookId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookId]);
 
   return (

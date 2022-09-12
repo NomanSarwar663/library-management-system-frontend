@@ -4,7 +4,6 @@ import { useSnackbar } from "notistack";
 import {
   Stack,
   Typography,
-  Divider,
   TextField,
   InputAdornment,
   IconButton,
@@ -65,17 +64,17 @@ const SignupForm = () => {
         const result = await signUp(values);
         console.log(result);
         if (result && result.status === "Success") {
-          enqueueSnackbar("Signup success!", {variant: "success"});
+          enqueueSnackbar("Signup success!", { variant: "success" });
           await delay(200);
           navigate("/books");
         } else {
-          enqueueSnackbar("Signup failed!", {variant: "error"});
+          enqueueSnackbar("Signup failed!", { variant: "error" });
           setErrors({ afterSubmit: result?.message || "Login failed" });
         }
       } catch (error) {
         resetForm();
         setSubmitting(false);
-        enqueueSnackbar("Signup failed!", {variant: "error"});
+        enqueueSnackbar("Signup failed!", { variant: "error" });
         setErrors({ afterSubmit: error.message });
       }
     },

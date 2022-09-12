@@ -14,7 +14,7 @@ import { CircularProgress } from "@mui/material";
 import useAuth from "../Hooks/useAuth";
 
 const Home = () => {
-  const [books, setbooks] = useState([]);
+  const [books, setbooks] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
   const { userData } = useAuth();
@@ -33,13 +33,14 @@ const Home = () => {
         }
       } catch (error) {
         console.log("Error", error);
-        enqueueSnackbar("Error occured!", { variant: "error" });
+        enqueueSnackbar("Error fetching Books!", { variant: "error" });
         setbooks(null);
       }
       setIsLoading(false);
     };
     GetAllBooks_();
-  }, [enqueueSnackbar]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box width="100%" height="100%">
@@ -87,9 +88,11 @@ const Home = () => {
               <Typography variant="h4" fontWeight="600" textAlign="center">
                 Books
               </Typography>
-              <Box sx={{ width: "100%", mt: "30px" }}>
-                <DataTable books={books} />
-              </Box>
+              {books !== null && (
+                <Box sx={{ width: "100%", mt: "30px" }}>
+                  <DataTable books={books} />
+                </Box>
+              )}
             </Box>
           </>
         )}

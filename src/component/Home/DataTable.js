@@ -11,12 +11,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
-
 import Radio from "@mui/material/Radio";
-
-// import IconButton from "@mui/material/IconButton";
-// import Tooltip from "@mui/material/Tooltip";
-// import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
@@ -32,6 +27,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  cursor: "pointer",
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
@@ -192,13 +188,12 @@ const DataTable = ({ books }) => {
             {books
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((book) => {
-                const isItemSelected = selectedRowId === book.id;
+                const isItemSelected = selectedRowId === book._id;
 
                 return (
                   <StyledTableRow
                     hover
                     onClick={(event) => {
-                      console.log("The book is", book);
                       return handleClick(event, book._id);
                     }}
                     role="radio"

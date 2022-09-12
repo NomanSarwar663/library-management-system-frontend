@@ -1,11 +1,10 @@
 import React from "react";
 // notistack
-import { useSnackbar } from "notistack"; 
+import { useSnackbar } from "notistack";
 import {
   Box,
   Stack,
   Typography,
-  Divider,
   TextField,
   InputAdornment,
   IconButton,
@@ -19,17 +18,13 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import LockIcon from "@mui/icons-material/Lock";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 // formik
 import { useFormik, Form, FormikProvider } from "formik";
 // Yup
 import * as Yup from "yup";
 // hooks
 import useAuth from "../../Hooks/useAuth";
-
-const delay = ms => new Promise(
-  resolve => setTimeout(resolve, ms)
-);
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -43,7 +38,6 @@ const LoginForm = () => {
   };
 
   const { signIn } = useAuth();
-  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
   // validation schema
@@ -68,9 +62,8 @@ const LoginForm = () => {
         const result = await signIn(values.email, values.password);
         console.log(result);
         if (result && result.status === "Success") {
-          enqueueSnackbar("Login success", {variant: "success"});
-          await delay(200);
-          navigate("/books");
+          enqueueSnackbar("Login success", { variant: "success" });
+          // navigate("/books");
         } else {
           setErrors({ afterSubmit: result?.message || "Login failed" });
         }
