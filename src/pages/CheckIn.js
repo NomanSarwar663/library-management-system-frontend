@@ -29,9 +29,11 @@ const CheckIn = () => {
         if (result && result.data) {
           setIssuedDetail(result.data);
         } else {
+          setIssuedDetail(null);
           enqueueSnackbar("Fetch detail failed!", { variant: "error" });
         }
       } catch (e) {
+        setIssuedDetail(null);
         enqueueSnackbar("Error occured", { variant: "error" });
       }
       setIsLoading(false);

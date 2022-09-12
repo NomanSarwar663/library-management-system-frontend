@@ -2,6 +2,8 @@
 import PropTypes from "prop-types";
 // react-router-dom
 import { useParams, useNavigate } from "react-router-dom";
+// notistack
+import { useSnackbar } from "notistack";
 // mui
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -12,14 +14,28 @@ import { PostBookCheckIn } from "../../Api";
 // moment library
 import moment from "moment";
 
+const delay = ms => new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
+
 const CheckInDetail = ({ issuedDetail }) => {
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const { bookId } = useParams();
 
   const checkInHandler = async () => {
-    const result = await PostBookCheckIn(bookId);
-    if (result && result.status === "Success") {
-      navigate("/books");
+    try {
+      const result = await PostBookCheckIn(bookId);
+
+      if (result && result.status === "Success") {
+        enqueueSnackbar("Post success!", { variant: "success" });
+        await delay(500);
+        navigate("/books");
+      } else {
+        enqueueSnackbar("Post failed!", { variant: "error" });
+      }
+    } catch (e) {
+      enqueueSnackbar("Error occured", { variant: "error" });
     }
   };
 

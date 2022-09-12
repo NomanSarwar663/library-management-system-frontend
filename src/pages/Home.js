@@ -27,10 +27,9 @@ const Home = () => {
 
         if (result && result.data) {
           setbooks(result.data.books);
-          enqueueSnackbar("Fetch Success!", { variant: "success" });
         } else {
           setbooks(null);
-          enqueueSnackbar("Fetch detail failed!", { variant: "error" });
+          enqueueSnackbar("Fetch books failed!", { variant: "error" });
         }
       } catch (error) {
         console.log("Error", error);

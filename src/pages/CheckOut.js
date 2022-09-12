@@ -9,7 +9,7 @@ import { CircularProgress, Stack } from "@mui/material";
 
 const CheckOut = () => {
   const [isLoading, setIsLoading] = useState(true);
-
+  
   useEffect(() => {
     setIsLoading(false);
   }, []);

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 // react-router-dom
 import { useParams, useNavigate } from "react-router-dom";
+// notistack
+import { useSnackbar } from "notistack";
 // mui
 import { TextField, Stack, Button } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -18,10 +20,16 @@ import { PostCheckOutDetail } from "../../Api";
 import moment from "moment-business-days";
 import * as rMoment from "moment";
 
+const delay = ms => new Promise(
+  resolve => setTimeout(resolve, ms)
+);
+
+
 const CheckOutForm = () => {
   const { bookId } = useParams();
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(new Date());
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
   const calcReturnDate = (checkOutDate, businessDays) => {
@@ -71,14 +79,18 @@ const CheckOutForm = () => {
         });
         console.log(result);
         if (result && result.status === "Success") {
+          enqueueSnackbar("Post success!", { variant: "success" });
+          await delay(500);
           navigate("/books");
         } else {
           setErrors({ afterSubmit: result?.message || "Login failed" });
+          enqueueSnackbar("Post failed!", { variant: "error" });
         }
       } catch (error) {
         // resetForm();
         setSubmitting(false);
         setErrors({ afterSubmit: error.message });
+        enqueueSnackbar("Error occured!", { variant: "error" });
       }
     },
   });

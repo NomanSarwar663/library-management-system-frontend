@@ -1,4 +1,6 @@
 import React from "react";
+// notistack
+import { useSnackbar } from "notistack"; 
 import {
   Box,
   Stack,
@@ -25,6 +27,10 @@ import * as Yup from "yup";
 // hooks
 import useAuth from "../../Hooks/useAuth";
 
+const delay = ms => new Promise(
+  resolve => setTimeout(resolve, ms)
+);
+
 const LoginForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -38,7 +44,7 @@ const LoginForm = () => {
 
   const { signIn } = useAuth();
   const navigate = useNavigate();
-  // const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   // validation schema
   const LoginSchema = Yup.object().shape({
@@ -62,6 +68,8 @@ const LoginForm = () => {
         const result = await signIn(values.email, values.password);
         console.log(result);
         if (result && result.status === "Success") {
+          enqueueSnackbar("Login success", {variant: "success"});
+          await delay(200);
           navigate("/books");
         } else {
           setErrors({ afterSubmit: result?.message || "Login failed" });

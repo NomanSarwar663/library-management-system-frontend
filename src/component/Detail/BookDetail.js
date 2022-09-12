@@ -4,7 +4,6 @@ import { Box, Typography, Stack, Alert, Grid, Chip } from "@mui/material";
 import IssuedHistoryTable from "./IssuedHistoryTable";
 
 const BookDetail = ({ data }) => {
-
   return (
     <Box
       width="100%"
@@ -21,7 +20,7 @@ const BookDetail = ({ data }) => {
             >
               Book Details
             </Typography>
-            {data.book.issuedDetails?.issuer?.name != null ? (
+            {data.book.issuedDetails?.issuer && (
               <Stack>
                 <Alert
                   severity="warning"
@@ -38,8 +37,6 @@ const BookDetail = ({ data }) => {
                   </Typography>
                 </Alert>
               </Stack>
-            ) : (
-              <></>
             )}
             <Stack
               component="span"
@@ -120,7 +117,7 @@ const BookDetail = ({ data }) => {
             >
               Issued Details
             </Typography>
-            {data.book.issuedDetails?.issuer?.name != null ? (
+            {data.book.issuedDetails?.issuer ? (
               <>
                 <Stack
                   component="span"

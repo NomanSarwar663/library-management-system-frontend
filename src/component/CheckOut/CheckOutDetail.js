@@ -4,6 +4,7 @@ import { Box, Stack } from "@mui/material";
 import CheckOutForm from "./CheckOutForm";
 
 const CheckOutDetail = ({ bookId }) => {
+
   return (
     <Box
       sx={{
