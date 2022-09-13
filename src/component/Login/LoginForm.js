@@ -56,19 +56,17 @@ const LoginForm = () => {
     },
     validationSchema: LoginSchema,
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
-      console.log(values);
-
       try {
         const result = await signIn(values.email, values.password);
-        console.log(result);
         if (result && result.status === "Success") {
-          enqueueSnackbar("Login success", { variant: "success" });
+          enqueueSnackbar("Login success!", { variant: "success" });
           // navigate("/books");
         } else {
+          enqueueSnackbar("Login failed!", { variant: "error" });
           setErrors({ afterSubmit: result?.message || "Login failed" });
         }
       } catch (error) {
-        resetForm();
+        enqueueSnackbar("Login failed!", { variant: "error" });
         setSubmitting(false);
         setErrors({ afterSubmit: error.message });
       }
