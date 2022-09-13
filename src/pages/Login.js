@@ -16,7 +16,9 @@ const Login = () => {
         my: "auto 0",
       }}
     >
-      <LoginForm />
+      <Box sx={{ width: { xs: "95%", sm: "600px", md: "600px" } }}>
+        <LoginForm />
+      </Box>
     </Box>
   );
 };

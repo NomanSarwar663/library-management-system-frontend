@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import React, {Suspense} from "react";
+import React, { Suspense } from "react";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./Contexts/JWTContext";
@@ -19,7 +19,7 @@ const holidays = [
   "05/01", // Labour Day
   "08/14", // Independence day
   "12/25", // Quaid-e-Azam day
-  "12/27"  // Anniversary of Benazir Bhutto's Death
+  "12/27", // Anniversary of Benazir Bhutto's Death
 ];
 
 moment.updateLocale("us", {
@@ -29,12 +29,12 @@ moment.updateLocale("us", {
 
 root.render(
   <BrowserRouter>
-  <Suspense fallback={<CircularProgress />}>
-    <AuthProvider>
-      <NotistackProvider>
-        <Router />
-      </NotistackProvider>
-    </AuthProvider>
+    <Suspense fallback={<CircularProgress />}>
+      <AuthProvider>
+        <NotistackProvider>
+          <Router />
+        </NotistackProvider>
+      </AuthProvider>
     </Suspense>
   </BrowserRouter>
 );

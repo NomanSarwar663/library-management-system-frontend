@@ -1,3 +1,4 @@
+import React from "react";
 // propTypes
 import PropTypes from "prop-types";
 // react-router-dom
@@ -14,9 +15,7 @@ import { PostBookCheckIn } from "../../Api";
 // moment library
 import moment from "moment";
 
-const delay = ms => new Promise(
-    resolve => setTimeout(resolve, ms)
-  );
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const CheckInDetail = ({ issuedDetail }) => {
   const navigate = useNavigate();
@@ -130,7 +129,7 @@ const CheckInDetail = ({ issuedDetail }) => {
             <Typography variant="body2" fontWeight="600">
               Penalty (if any):
             </Typography>
-            <Typography variant="body2">0 Pkr</Typography>
+            <Typography variant="body2">{issuedDetail.penalty} Pkr</Typography>
           </Stack>
         </Stack>
         <Stack sx={{ marginTop: "20px" }}>

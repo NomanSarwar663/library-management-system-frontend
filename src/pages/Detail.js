@@ -7,15 +7,17 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 // components
 import BookDetail from "../component/Detail/BookDetail";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { GetBookDetail } from "../Api";
 import { CircularProgress, Stack } from "@mui/material";
+import { checkToken } from "../utils/jwt";
 
 const Detail = () => {
   const [bookDetail, setBookDetail] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { bookId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate;
 
   useEffect(() => {
     const GetDetail = async (id) => {
@@ -31,6 +33,10 @@ const Detail = () => {
         }
       } catch (error) {
         console.log("Error", error);
+        const isValid = checkToken(error);
+        if (!isValid) {
+          navigate("/auth/login");
+        }
         enqueueSnackbar("Error occured!", { variant: "error" });
         setBookDetail(null);
       }
@@ -38,7 +44,7 @@ const Detail = () => {
     };
 
     GetDetail(bookId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookId]);
 
   return (

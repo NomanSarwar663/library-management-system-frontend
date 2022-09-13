@@ -12,12 +12,15 @@ import { GetAllBooks } from "../Api";
 import { Stack } from "@mui/system";
 import { CircularProgress } from "@mui/material";
 import useAuth from "../Hooks/useAuth";
+import { checkToken } from "../utils/jwt";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [books, setbooks] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
   const { userData } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const GetAllBooks_ = async () => {
@@ -33,14 +36,18 @@ const Home = () => {
         }
       } catch (error) {
         console.log("Error", error);
+        const isValid = checkToken(error);
+        if (!isValid) {
+          navigate("/auth/login");
+        }
         enqueueSnackbar("Error fetching Books!", { variant: "error" });
         setbooks(null);
       }
       setIsLoading(false);
     };
     GetAllBooks_();
-
-  }, [enqueueSnackbar]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box width="100%" height="100%">
@@ -88,7 +95,7 @@ const Home = () => {
               <Typography variant="h4" fontWeight="600" textAlign="center">
                 Books
               </Typography>
-              {books !== null && (
+              {books && (
                 <Box sx={{ width: "100%", mt: "30px" }}>
                   <DataTable books={books} />
                 </Box>

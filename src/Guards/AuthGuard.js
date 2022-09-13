@@ -5,16 +5,10 @@ import useAuth from "../Hooks/useAuth";
 // pages
 import { LoginPage } from "../pages";
 
-// ----------------------------------------------------------------------
-
 export default function AuthGuard({ children }) {
   const { isAuthenticated } = useAuth();
   const { pathname } = useLocation();
   const [requestedLocation, setRequestedLocation] = useState(null);
-
-  // if (!isAuthenticated) {
-  //   return null;
-  // }
 
   if (!isAuthenticated) {
     if (pathname !== requestedLocation) {
