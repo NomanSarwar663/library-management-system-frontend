@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 // react-router-dom
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 // notistack
 import { useSnackbar } from "notistack";
 // mui
@@ -13,12 +13,14 @@ import CheckInDetail from "../component/CheckIn/CheckInDetail";
 import CircularProgress from "@mui/material/CircularProgress";
 // API
 import { GetIssuedBookDetail } from "../Api";
+import { checkToken } from "../utils/jwt";
 
 const CheckIn = () => {
   const [issuedDetail, setIssuedDetail] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { bookId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const GetDetail = async (id) => {
@@ -34,13 +36,17 @@ const CheckIn = () => {
         }
       } catch (e) {
         setIssuedDetail(null);
+        const isValid = checkToken(e);
+        if (!isValid) {
+          navigate("/auth/login");
+        }
         enqueueSnackbar("Error occured", { variant: "error" });
       }
       setIsLoading(false);
     };
 
     GetDetail(bookId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookId]);
 
   return (
@@ -67,7 +73,7 @@ const CheckIn = () => {
             </Typography>
 
             <Box mt="30px" sx={{ width: "100%" }}>
-              <CheckInDetail issuedDetail={issuedDetail} />
+              {issuedDetail && <CheckInDetail issuedDetail={issuedDetail} />}
             </Box>
           </Box>
         )}

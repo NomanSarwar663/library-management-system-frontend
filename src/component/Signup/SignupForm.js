@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // notistack
 import { useSnackbar } from "notistack";
 import {
@@ -14,7 +14,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import LockIcon from "@mui/icons-material/Lock";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 // formik
 import { useFormik, Form, FormikProvider } from "formik";
 // Yup
@@ -22,13 +22,10 @@ import * as Yup from "yup";
 // hooks
 import useAuth from "../../Hooks/useAuth";
 
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
 const SignupForm = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { signUp } = useAuth();
-  const navigate = useNavigate();
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -62,11 +59,9 @@ const SignupForm = () => {
         const result = await signUp(values);
         if (result && result.status === "Success") {
           enqueueSnackbar("Signup success!", { variant: "success" });
-          // await delay(200);
-          // navigate("/books");
         } else {
           enqueueSnackbar("Signup failed!", { variant: "error" });
-          setErrors({ afterSubmit: result?.message || "Login failed" });
+          setErrors({ afterSubmit: result?.message || "Signup failed" });
         }
       } catch (error) {
         enqueueSnackbar("Signup failed!", { variant: "error" });
@@ -79,15 +74,16 @@ const SignupForm = () => {
   const { errors, touched, handleSubmit, getFieldProps } = formik;
   return (
     <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Stack
-          spacing={2}
-          alignItems="center"
-          sx={{ width: { xs: "100%", md: "100%" } }}
-        >
+      <Form
+        autoComplete="off"
+        noValidate
+        onSubmit={handleSubmit}
+        sx={{ width: "95%" }}
+      >
+        <Stack spacing={2} alignItems="center" sx={{ width: "100%" }}>
           <Typography
-            variant="h4"
-            sx={{ fontWeight: "700" }}
+            variant="h5"
+            sx={{ fontWeight: "700", textAlign: "center" }}
             color="primary.main"
           >
             LIBRARY MANAGEMENT SYSTEM

@@ -16,7 +16,9 @@ const Signup = () => {
         my: "auto 0",
       }}
     >
-      <SignupForm />
+      <Box sx={{ width: { xs: "95%", sm: "600px", md: "600px" } }}>
+        <SignupForm />
+      </Box>
     </Box>
   );
 };

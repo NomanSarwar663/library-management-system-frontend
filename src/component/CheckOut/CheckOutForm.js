@@ -19,11 +19,9 @@ import { PostCheckOutDetail } from "../../Api";
 // hooks
 import moment from "moment-business-days";
 import * as rMoment from "moment";
+import { checkToken } from "../../utils/jwt";
 
-const delay = ms => new Promise(
-  resolve => setTimeout(resolve, ms)
-);
-
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const CheckOutForm = () => {
   const { bookId } = useParams();
@@ -48,10 +46,18 @@ const CheckOutForm = () => {
 
   const CheckOutSchema = Yup.object().shape({
     name: Yup.string().required("The Name of Borrower is required."),
-    phoneNo: Yup.string().required("The Phone Number  is required."),
-    nationalID: Yup.string().required(
-      "The nationalID of Borrower is required."
-    ),
+    phoneNo: Yup.string()
+      .required()
+      .matches(
+        /^\(?([0-9]{2})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
+        "Must be Valid phone number"
+      ),
+    nationalID: Yup.string()
+      .required()
+      .matches(
+        /^(?:\d{2}\d{3}-\d{3}-\d{3}|\d{11})$/gm,
+        "Must be Valid NIC number"
+      ),
   });
   // formik
   const formik = useFormik({
@@ -71,16 +77,20 @@ const CheckOutForm = () => {
           checkOutDate: rMoment(checkOutDate).format(),
           returnDate: rMoment(checkInDate).format(),
         });
+
         if (result && result.status === "Success") {
           enqueueSnackbar("Post success!", { variant: "success" });
           await delay(500);
           navigate("/books");
         } else {
           setErrors({ afterSubmit: result?.message || "Login failed" });
+          const isValid = checkToken(result?.message);
+          if (!isValid) {
+            navigate("/auth/login");
+          }
           enqueueSnackbar("Post failed!", { variant: "error" });
         }
       } catch (error) {
-        // resetForm();
         setSubmitting(false);
         setErrors({ afterSubmit: error.message });
         enqueueSnackbar("Error occured!", { variant: "error" });
@@ -160,7 +170,6 @@ const CheckOutForm = () => {
               label="Checkout Date"
               value={checkOutDate}
               onChange={(newValue) => {
-                // const newDate = convertDate(newValue);
                 setCheckOutDate(newValue);
               }}
               renderInput={(params) => (

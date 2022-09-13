@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import Table from "@mui/material/Table";
@@ -150,9 +150,9 @@ TopBar.propTypes = {
 };
 
 const DataTable = ({ books }) => {
-  const [selectedRowId, setSelectedRowId] = React.useState(-1);
+  const [selectedRowId, setSelectedRowId] = useState(-1);
   const rowsPerPage = 10;
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = useState(0);
 
   const handleClick = (event, id) => {
     if (selectedRowId !== id) setSelectedRowId(id);

@@ -1,6 +1,6 @@
 import axios from "axios";
 // configuration
-const baseURL = process.env.REACT_APP_API_URL;
+const baseURL = "https://library-management-app-node.herokuapp.com/";
 
 const axiosInstance = axios.create({
   baseURL,

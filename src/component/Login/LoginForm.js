@@ -1,15 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 // notistack
 import { useSnackbar } from "notistack";
 import {
-  Box,
   Stack,
   Typography,
   TextField,
   InputAdornment,
   IconButton,
-  FormControlLabel,
-  Checkbox,
   Button,
   Alert,
 } from "@mui/material";
@@ -17,7 +14,6 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import LockIcon from "@mui/icons-material/Lock";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { Link } from "react-router-dom";
 // formik
 import { useFormik, Form, FormikProvider } from "formik";
@@ -27,7 +23,7 @@ import * as Yup from "yup";
 import useAuth from "../../Hooks/useAuth";
 
 const LoginForm = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -60,7 +56,6 @@ const LoginForm = () => {
         const result = await signIn(values.email, values.password);
         if (result && result.status === "Success") {
           enqueueSnackbar("Login success!", { variant: "success" });
-          // navigate("/books");
         } else {
           enqueueSnackbar("Login failed!", { variant: "error" });
           setErrors({ afterSubmit: result?.message || "Login failed" });
@@ -77,14 +72,10 @@ const LoginForm = () => {
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Stack
-          spacing={2}
-          alignItems="center"
-          sx={{ width: { xs: "100%", md: "100%" } }}
-        >
+        <Stack spacing={2} alignItems="center" sx={{ width: "100%" }}>
           <Typography
-            variant="h4"
-            sx={{ fontWeight: "700" }}
+            variant="h5"
+            sx={{ fontWeight: "700", textAlign: "center" }}
             color="primary.main"
           >
             LIBRARY MANAGEMENT SYSTEM
@@ -166,40 +157,6 @@ const LoginForm = () => {
                   </InputAdornment>
                 ),
               }}
-            />
-          </Stack>
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-            sx={{ width: "100%" }}
-          >
-            <FormControlLabel
-              control={
-                <Checkbox
-                  icon={
-                    <Box
-                      sx={{
-                        height: "24px",
-                        width: "24px",
-                        borderRadius: 2,
-                      }}
-                    ></Box>
-                  }
-                  checkedIcon={<CheckBoxIcon />}
-                />
-              }
-              label={
-                <>
-                  <Typography
-                    variant="body2"
-                    sx={{ fontWeight: "500" }}
-                    color="text.secondary"
-                  >
-                    Remember me
-                  </Typography>
-                </>
-              }
             />
           </Stack>
           <Stack sx={{ width: "100%" }}>
