@@ -39,8 +39,8 @@ const Home = () => {
       setIsLoading(false);
     };
     GetAllBooks_();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+  }, [enqueueSnackbar]);
 
   return (
     <Box width="100%" height="100%">

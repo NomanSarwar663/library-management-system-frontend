@@ -77,7 +77,6 @@ function AuthProvider({ children }) {
 
   //login api call
   const signIn = async (email, password) => {
-    console.log("in signin");
     const response = await axios.post("/login", {
       email,
       password,
@@ -102,19 +101,15 @@ function AuthProvider({ children }) {
       });
       navigate("/books");
     }
-
     return data;
   };
 
   // Register api call
   const signUp = async (payload) => {
-    console.log(payload);
     const response = await axios.post("/register", { ...payload });
     const { data } = response;
-    console.log(data.status);
     if (data && data.status === "Success") {
-      const { accessToken, user } = data;
-      console.log(accessToken, user);
+      const { token, user } = data;
       const userData = {
         firstName: user.firstName,
         lastName: user.lastName,
@@ -122,7 +117,7 @@ function AuthProvider({ children }) {
         email: user.email,
         phoneNo: user.phoneNo,
       };
-      setSession(accessToken);
+      setSession(token);
       localStorage.setItem("user", JSON.stringify(userData));
       dispatch({
         type: "REGISTER",
